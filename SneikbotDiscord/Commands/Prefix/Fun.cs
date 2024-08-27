@@ -3,7 +3,6 @@ using AIProvider.Providers;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using SneikbotDiscord.Markov;
 using SneikbotDiscord.Sneik;
 using SneikbotDiscord.Utils;
 using System;
@@ -11,8 +10,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
