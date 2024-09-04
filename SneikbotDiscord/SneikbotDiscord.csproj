@@ -57,6 +57,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\AIProvider.dll</HintPath>
     </Reference>
+    <Reference Include="BrotliSharpLib, Version=0.3.2.0, Culture=neutral, PublicKeyToken=3f4e2a1cd615fcb7, processorArchitecture=MSIL">
+      <HintPath>..\packages\BrotliSharpLib.0.3.3\lib\net451\BrotliSharpLib.dll</HintPath>
+    </Reference>
     <Reference Include="DSharpPlus, Version=4.4.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DSharpPlus.4.4.6\lib\netstandard2.0\DSharpPlus.dll</HintPath>
     </Reference>
