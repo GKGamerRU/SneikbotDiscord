@@ -135,7 +135,7 @@ namespace SneikbotDiscord.Commands.Prefix
 
             dsMessage = await dsMessage.ModifyAsync(":hourglass_flowing_sand:`Генерирую ответ... Это займет 1-5 минут...`");
             var result = await autoProvider.SendMessage(prompt, false);
-
+            
             await dsMessage.ModifyAsync(new DiscordMessageBuilder().WithContent($"{ctx.Member.Mention} {result.message}"));
             isProcessing = false;
         }
@@ -201,6 +201,48 @@ namespace SneikbotDiscord.Commands.Prefix
 
             await ctx.RespondAsync(builder);
         }
+
+        [Command("рецепт")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("Генерируется рандомный рецепт")]
+        public async Task Recipe(CommandContext ctx, params string[] texts)
+        {
+            if (ctx.Channel.Name != "gentai") return;
+            string text = null;
+            if (texts.Length != 0) 
+                text = string.Join(" ", texts);
+
+            var random = new Random();
+            string recipeTitle = text != null ? text : SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(1, 3));
+
+            StringBuilder ingredients = new StringBuilder();
+            ingredients.AppendLine();
+            ingredients.AppendLine("***===- Для приготовления нам потребуется -===***");
+
+            for (int i = 0; i < random.Next(3, 10); i++)
+            {
+                ingredients.AppendLine($"{i + 1}. {random.Next(1, 20) * 50}гр {SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(1, 3))}");
+            }
+
+            ingredients.AppendLine("***===- Для приготовления нам потребуется -===***");
+            ingredients.AppendLine();
+
+            string text2 = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 6));
+            
+            ingredients.AppendLine($"**Блюдо подано! {text2}, {ctx.User.Username}!**");
+
+            var builder = new DiscordMessageBuilder()
+                .AddEmbed(new DiscordEmbedBuilder()
+                {
+                    Title = $"Рецепт: {recipeTitle}",
+                    Description = ingredients.ToString(),
+                    Color = new DiscordColor(random.Next(0, 0xFFFFFF))
+                });
+
+            await ctx.RespondAsync(builder);
+        }
+
         [Command("диалог")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]
         [RequireGuild]
