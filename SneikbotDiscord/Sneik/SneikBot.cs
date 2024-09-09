@@ -116,6 +116,10 @@ namespace SneikbotDiscord.Sneik
 
                 File.WriteAllText(path, markovWords);
             }
+            foreach(var guild in Guilds)
+            {
+                await jsonHandler.SaveGuildDataToJSON(guild.Value, guild.Key);
+            }
 
             await ModifyBotNickname($"Sneik (выключен {DateTime.Now.ToShortTimeString()} по МСК)",true);
             //discord.DisconnectAsync().GetAwaiter().GetResult();
@@ -132,6 +136,8 @@ namespace SneikbotDiscord.Sneik
             foreach (var guild in sender.Guilds)
             {
                 var guildData = await jsonHandler.GetAllGuildDataFromJSON(guild.Key);
+                if (guildData == null) guildData = new GuildData(guild.Key, "!");
+
                 Guilds.Add(guildData.ID, guildData);
 
                 string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords\\{guildData.ID}.json";
