@@ -44,7 +44,15 @@ namespace SneikbotDiscord.Sneik
 
             discord.Ready += OnReady;
             discord.MessageCreated += OnMessageCreated;
-
+            discord.GuildAvailable +=
+                async (s, e) =>
+                {
+                    if (Guilds.ContainsKey(e.Guild.Id) == false)
+                    {
+                        Guilds.Add(e.Guild.Id, new GuildData(e.Guild.Id, "!"));
+                    }
+                };
+                    
             discord.ComponentInteractionCreated += async (s, e) =>
             {
                 if (e.Id == "btn_ping")
