@@ -111,7 +111,7 @@ namespace SneikbotDiscord.Sneik
         }
         public static async Task Stop()
         {
-            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords";
+            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov";
             if (Directory.Exists(markovPath) == false)
             {
                 Directory.CreateDirectory(markovPath);
@@ -119,7 +119,13 @@ namespace SneikbotDiscord.Sneik
 
             foreach (var guild in markovChain)
             {
-                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords\\{guild.Key}.json";
+                string markovGuildPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov\\{guild.Key}";
+                if (Directory.Exists(markovGuildPath) == false)
+                {
+                    Directory.CreateDirectory(markovGuildPath);
+                }
+
+                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov\\{guild.Key}\\chains.json";
                 var markovWords = JsonConvert.SerializeObject(guild.Value.chain);
 
                 File.WriteAllText(path, markovWords);
@@ -135,7 +141,7 @@ namespace SneikbotDiscord.Sneik
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
         {
-            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords";
+            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov";
             if (Directory.Exists(markovPath) == false)
             {
                 Directory.CreateDirectory(markovPath);
@@ -143,12 +149,18 @@ namespace SneikbotDiscord.Sneik
 
             foreach (var guild in sender.Guilds)
             {
+                string markovGuildPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov\\{guild.Key}";
+                if (Directory.Exists(markovGuildPath) == false)
+                {
+                    Directory.CreateDirectory(markovGuildPath);
+                }
+
                 var guildData = await jsonHandler.GetAllGuildDataFromJSON(guild.Key);
                 if (guildData == null) guildData = new GuildData(guild.Key, "!");
 
                 Guilds.Add(guildData.ID, guildData);
 
-                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords\\{guildData.ID}.json";
+                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov\\{guildData.ID}\\chains.json";
                 if (File.Exists(path))
                 {
                     var markovWords = File.ReadAllText(path);
