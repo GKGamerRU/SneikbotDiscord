@@ -176,6 +176,9 @@
     <Compile Include="BotConfig\BotConfiguration.cs" />
     <Compile Include="Commands\Prefix\Fun.cs" />
     <Compile Include="Commands\Slash\Basic.cs" />
+    <Compile Include="DataBase\ChannelData.cs" />
+    <Compile Include="DataBase\GuildData.cs" />
+    <Compile Include="DataBase\JSONDataHandler.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,7 +225,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataBase\" />
     <Folder Include="Sneik\Modules\" />
   </ItemGroup>
   <ItemGroup>

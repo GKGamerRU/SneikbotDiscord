@@ -151,13 +151,13 @@ namespace SneikbotDiscord.Commands.Prefix
             Bitmap bitmap = null;
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName)) {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(ctx.Message.Attachments[0].Url);
-                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain, bitmap); 
+                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap); 
             }else if(url != null)
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(url);
-                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain, bitmap);
+                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }else
-                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain);
+                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
 
 
             var stream = new System.IO.MemoryStream();
@@ -181,15 +181,15 @@ namespace SneikbotDiscord.Commands.Prefix
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName))
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(ctx.Message.Attachments[0].Url);
-                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain, bitmap);
+                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else if (url != null)
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(url);
-                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain, bitmap);
+                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else
-                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain);
+                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
 
 
             var stream = new System.IO.MemoryStream();
@@ -214,7 +214,7 @@ namespace SneikbotDiscord.Commands.Prefix
                 text = string.Join(" ", texts);
 
             var random = new Random();
-            string recipeTitle = text != null ? text : SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(1, 3));
+            string recipeTitle = text != null ? text : SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(1, 3));
 
             StringBuilder ingredients = new StringBuilder();
             ingredients.AppendLine();
@@ -222,13 +222,13 @@ namespace SneikbotDiscord.Commands.Prefix
 
             for (int i = 0; i < random.Next(3, 10); i++)
             {
-                ingredients.AppendLine($"{i + 1}. {random.Next(1, 20) * 50}гр {SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(1, 3))}");
+                ingredients.AppendLine($"{i + 1}. {random.Next(1, 20) * 50}гр {SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(1, 3))}");
             }
 
             ingredients.AppendLine("***===- Для приготовления нам потребуется -===***");
             ingredients.AppendLine();
 
-            string text2 = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 6));
+            string text2 = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(3, 6));
             
             ingredients.AppendLine($"**Блюдо подано! {text2}, {ctx.User.Username}!**");
 
@@ -262,7 +262,7 @@ namespace SneikbotDiscord.Commands.Prefix
             }
             else
             {
-                currentMessage = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 25));
+                currentMessage = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(3, 25));
                 stringBuilder.AppendLine($"{ctx.User.Username}: {currentMessage}");
             }
 
@@ -272,9 +272,9 @@ namespace SneikbotDiscord.Commands.Prefix
                 currentUser = currentUser == ctx.User ? ctx.Client.CurrentUser : ctx.User;
 
                 var words = currentMessage.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                var sentence = SneikBot.markovChain.GenerateSentence(words[random.Next(words.Length - 1)], random.Next(3, 25));
+                var sentence = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(words[random.Next(words.Length - 1)], random.Next(3, 25));
                 if(sentence == currentMessage)
-                    sentence = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 25));
+                    sentence = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(3, 25));
 
                 stringBuilder.AppendLine($"{currentUser.Username}: {sentence}");
                 currentMessage = sentence;
@@ -295,7 +295,7 @@ namespace SneikbotDiscord.Commands.Prefix
             Random random = new Random();
             var messages = random.Next(4, 8);
 
-            string currentMessage = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 25));
+            string currentMessage = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(3, 25));
             stringBuilder.AppendLine($"{ctx.User.Username}: {currentMessage}");
 
             var currentUser = ctx.User;
@@ -303,7 +303,7 @@ namespace SneikbotDiscord.Commands.Prefix
             {
                 currentUser = currentUser == ctx.User ? ctx.Client.CurrentUser : ctx.User;
 
-                var sentence = SneikBot.markovChain.GenerateSentence(SneikBot.markovChain.GetRandomStartWord(), random.Next(3, 25));
+                var sentence = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(3, 25));
                 stringBuilder.AppendLine($"{currentUser.Username}: {sentence}");
             }
 

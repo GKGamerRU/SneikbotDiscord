@@ -13,6 +13,7 @@ using DSharpPlus.SlashCommands;
 using SneikbotDiscord.Markov;
 using Newtonsoft.Json;
 using SneikbotDiscord.Utils;
+using SneikbotDiscord.DataBase;
 
 namespace SneikbotDiscord.Sneik
 {
@@ -20,24 +21,16 @@ namespace SneikbotDiscord.Sneik
     {
         public static event Action<string> OnLog = delegate { };
 
+        public static readonly JSONDataHandler jsonHandler = new JSONDataHandler();
         private static DiscordClient discord;
         private static CommandsNextExtension commands;
         private static SlashCommandsExtension slash;
-        public static MarkovChain markovChain = new MarkovChain();
+        public static Dictionary<ulong, MarkovChain> markovChain = new Dictionary<ulong, MarkovChain>();
+
+        public static Dictionary<ulong, GuildData> Guilds = new Dictionary<ulong, GuildData>();
 
         public static async Task Start()
         {
-            if (File.Exists("words.json"))
-            {
-                var collectedWords = File.ReadAllText("words.json");
-                collectedMessages = JsonConvert.DeserializeObject<List<string>>(collectedWords);
-            }
-            if (File.Exists("markovWords.json"))
-            {
-                var markovWords = File.ReadAllText("markovWords.json");
-                markovChain.ApplyWords(JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(markovWords));
-            }
-
             var botConfig = BotConfiguration.LoadConfig();
 
             discord = new DiscordClient(new DiscordConfiguration
@@ -79,7 +72,24 @@ namespace SneikbotDiscord.Sneik
                 StringPrefixes = new string[] { botConfig.Prefix },
                 EnableDms = false,
                 EnableMentionPrefix = true,
-                EnableDefaultHelp = false
+                EnableDefaultHelp = false,
+
+                PrefixResolver = async (msg) =>
+                {
+                    var guildId = msg.Channel.GuildId;
+
+                    //var customprefixdata = await jsonHandler.GetAllGuildDataFromJSON((ulong)guildId);
+                    var customprefixdata = Guilds[guildId.Value];
+
+                    if (customprefixdata.Prefix != null)
+                    {
+                        return msg.GetStringPrefixLength(customprefixdata.Prefix);
+                    }
+                    else
+                    {
+                        return msg.GetStringPrefixLength(botConfig.Prefix);
+                    }
+                }
             };
 
             commands = discord.UseCommandsNext(commandsConfiguration);
@@ -93,11 +103,19 @@ namespace SneikbotDiscord.Sneik
         }
         public static async Task Stop()
         {
-            var collectedWords = JsonConvert.SerializeObject(collectedMessages);
-            File.WriteAllText("words.json", collectedWords);
+            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords";
+            if (Directory.Exists(markovPath) == false)
+            {
+                Directory.CreateDirectory(markovPath);
+            }
 
-            var markovWords = JsonConvert.SerializeObject(markovChain.chain);
-            File.WriteAllText("markovWords.json", markovWords);
+            foreach (var guild in markovChain)
+            {
+                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords\\{guild.Key}.json";
+                var markovWords = JsonConvert.SerializeObject(guild.Value.chain);
+
+                File.WriteAllText(path, markovWords);
+            }
 
             await ModifyBotNickname($"Sneik (выключен {DateTime.Now.ToShortTimeString()} по МСК)",true);
             //discord.DisconnectAsync().GetAwaiter().GetResult();
@@ -105,7 +123,31 @@ namespace SneikbotDiscord.Sneik
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
         {
+            string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords";
+            if (Directory.Exists(markovPath) == false)
+            {
+                Directory.CreateDirectory(markovPath);
+            }
+
+            foreach (var guild in sender.Guilds)
+            {
+                var guildData = await jsonHandler.GetAllGuildDataFromJSON(guild.Key);
+                Guilds.Add(guildData.ID, guildData);
+
+                string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\MarkovWords\\{guildData.ID}.json";
+                if (File.Exists(path))
+                {
+                    var markovWords = File.ReadAllText(path);
+                    var guildMarkov = new MarkovChain();
+                    guildMarkov.ApplyWords(JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(markovWords));
+
+                    markovChain.Add(guildData.ID, guildMarkov);
+                }
+            }
+
             OnLog("Bot is connected and ready!");
+            await CreatePaths();
+
             OnLog($"Сервера {discord.Guilds.Count}");
             await ModifyBotNickname("Sneik");
         }
@@ -121,15 +163,41 @@ namespace SneikbotDiscord.Sneik
 
             return builder;
         }
+        public static async Task CreatePaths()
+        {
+            //var vc = JSONDataHandler.DATA_TYPES.USERVC;
+            var guild = JSONDataHandler.DATA_TYPES.GUILD;
+            //var category = JSONDataHandler.DATA_TYPES.CATEGORY;
+            var channel = JSONDataHandler.DATA_TYPES.CHANNEL;
+            //var role = JSONDataHandler.DATA_TYPES.ROLE;
+            //var message = JSONDataHandler.DATA_TYPES.MESSAGE;
+            //var vccategory = JSONDataHandler.DATA_CATEGORIES.PrivateVCUserData;
+            var guildcategory = JSONDataHandler.DATA_CATEGORIES.GuildData;
+            //var categorycategory = JSONDataHandler.DATA_CATEGORIES.CategoryData;
+            var channelcategory = JSONDataHandler.DATA_CATEGORIES.ChannelData;
+            //var rolecategory = JSONDataHandler.DATA_CATEGORIES.RoleData;
+            //var messagecategory = JSONDataHandler.DATA_CATEGORIES.MessageData;
 
-        static List<string> collectedMessages = new List<string>();
+            //jsonHandler.CreatePathIfNotExists(vc, vccategory);
+            jsonHandler.CreatePathIfNotExists(guild, guildcategory);
+            //jsonHandler.CreatePathIfNotExists(category, categorycategory);
+            jsonHandler.CreatePathIfNotExists(channel, channelcategory);
+            //jsonHandler.CreatePathIfNotExists(role, rolecategory);
+            //jsonHandler.CreatePathIfNotExists(message, messagecategory);
+
+            await Task.CompletedTask;
+        }
+
+
+
+        //static List<string> collectedMessages = new List<string>();
         private static async Task OnMessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
             if (e.Author.IsBot) return;
             OnLog($"Server {e.Guild.Name} -> {e.Channel.Name} -> {e.Author.Username}: {e.Message.Content}");
-
+            
             // Сохраняем сообщения
-            if (e.Message.Content.StartsWith("!") == false)
+            if (e.Message.Content.StartsWith(Guilds[e.Guild.Id].Prefix) == false)
             {
                 string sentence = e.Message.Content.FormatSentence().Replace("\n", " ");
 
@@ -149,11 +217,9 @@ namespace SneikbotDiscord.Sneik
                     //    words[i] = word;
                     //}
                 }
-                markovChain.AddWords(words);
+                markovChain[e.Guild.Id].AddWords(words);
 
                 sentence = string.Join(" ",words);
-                if (!collectedMessages.Contains(sentence))
-                    collectedMessages.Add(sentence);
             }
             
             if (e.Message.Content.ToLower().StartsWith("ping") && e.Message.MentionedUsers.Contains(discord.CurrentUser))
@@ -177,7 +243,7 @@ namespace SneikbotDiscord.Sneik
                     //var words2 = collectedMessages[new Random().Next(collectedMessages.Count)].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     //string startWord = words2[new Random().Next(words2.Length)];
                     //string response = markovChain.GenerateSentence(startWord, new Random().Next(3,25));
-                    string response = markovChain.GenerateSentence(markovChain.GetRandomStartWord(), new Random().Next(3,25));
+                    string response = markovChain[e.Guild.Id].GenerateSentence(markovChain[e.Guild.Id].GetRandomStartWord(), new Random().Next(3,25));
 
                     if (new Random().Next(10) == 0)
                         response = response.ToUpper();

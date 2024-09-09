@@ -8,6 +8,8 @@ namespace SneikbotDiscord.Markov
     public class MarkovChain
     {
         public Dictionary<string, List<string>> chain = new Dictionary<string, List<string>>();
+
+
         private Random random = new Random();
         public string GetRandomStartWord()
         {
