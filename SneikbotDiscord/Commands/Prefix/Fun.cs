@@ -146,7 +146,7 @@ namespace SneikbotDiscord.Commands.Prefix
         [Description("Показывает изображение-демотиватор с бредовым текстом")]
         public async Task Demotivator(CommandContext ctx, string url = null)
         {
-            if (ctx.Channel.Name != "gentai") return;
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
 
             Bitmap bitmap = null;
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName)) {
@@ -176,7 +176,8 @@ namespace SneikbotDiscord.Commands.Prefix
         [Description("Показывает изображение с бредовым текстом")]
         public async Task Bruh(CommandContext ctx, string url = null)
         {
-            if (ctx.Channel.Name != "gentai") return;
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
             Bitmap bitmap = null;
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName))
             {
@@ -208,7 +209,8 @@ namespace SneikbotDiscord.Commands.Prefix
         [Description("Генерируется рандомный рецепт")]
         public async Task Recipe(CommandContext ctx, params string[] texts)
         {
-            if (ctx.Channel.Name != "gentai") return;
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
             string text = null;
             if (texts.Length != 0) 
                 text = string.Join(" ", texts);
@@ -249,7 +251,8 @@ namespace SneikbotDiscord.Commands.Prefix
         [Description("создает диалог между вами и ботом")]
         public async Task Dialog(CommandContext ctx, params string[] texts)
         {
-            if (ctx.Channel.Name != "gentai") return;
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
             string text = null;
             if(texts.Length != 0) text = string.Join(" ", texts);
             StringBuilder stringBuilder = new StringBuilder();
@@ -290,7 +293,8 @@ namespace SneikbotDiscord.Commands.Prefix
         [Description("создает диалог между вами и ботом из рандомных предложений")]
         public async Task RandomDialog(CommandContext ctx)
         {
-            if (ctx.Channel.Name != "gentai") return;
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
             StringBuilder stringBuilder = new StringBuilder();
             Random random = new Random();
             var messages = random.Next(4, 8);

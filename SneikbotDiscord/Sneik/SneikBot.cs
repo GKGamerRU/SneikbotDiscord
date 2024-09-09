@@ -49,7 +49,7 @@ namespace SneikbotDiscord.Sneik
                 {
                     if (Guilds.ContainsKey(e.Guild.Id) == false)
                     {
-                        Guilds.Add(e.Guild.Id, new GuildData(e.Guild.Id, "!"));
+                        Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
                     }
                 };
                     
@@ -102,6 +102,7 @@ namespace SneikbotDiscord.Sneik
 
             commands = discord.UseCommandsNext(commandsConfiguration);
             commands.RegisterCommands<Commands.Prefix.Fun>();
+            commands.RegisterCommands<Commands.Prefix.MarkovModule>();
 
             slash = discord.UseSlashCommands();
             slash.RegisterCommands<Commands.Slash.Basic>();
@@ -132,6 +133,7 @@ namespace SneikbotDiscord.Sneik
             }
             foreach(var guild in Guilds)
             {
+                await jsonHandler.DeleteGuildData(guild.Key);
                 await jsonHandler.SaveGuildDataToJSON(guild.Value, guild.Key);
             }
 
@@ -156,7 +158,7 @@ namespace SneikbotDiscord.Sneik
                 }
 
                 var guildData = await jsonHandler.GetAllGuildDataFromJSON(guild.Key);
-                if (guildData == null) guildData = new GuildData(guild.Key, "!");
+                if (guildData == null) guildData = new GuildData() {ID = guild.Key };
 
                 Guilds.Add(guildData.ID, guildData);
 
@@ -223,7 +225,7 @@ namespace SneikbotDiscord.Sneik
             OnLog($"Server {e.Guild.Name} -> {e.Channel.Name} -> {e.Author.Username}: {e.Message.Content}");
             
             // Сохраняем сообщения
-            if (e.Message.Content.StartsWith(Guilds[e.Guild.Id].Prefix) == false)
+            if (e.Message.Content.StartsWith(Guilds[e.Guild.Id].Prefix) == false && Guilds[e.Guild.Id].MarkovReadingChannels.Contains(e.Channel.Id))
             {
                 string sentence = e.Message.Content.FormatSentence().Replace("\n", " ");
 
@@ -244,8 +246,6 @@ namespace SneikbotDiscord.Sneik
                     //}
                 }
                 markovChain[e.Guild.Id].AddWords(words);
-
-                sentence = string.Join(" ",words);
             }
             
             if (e.Message.Content.ToLower().StartsWith("ping") && e.Message.MentionedUsers.Contains(discord.CurrentUser))
@@ -264,7 +264,7 @@ namespace SneikbotDiscord.Sneik
             }
             else
             {
-                if (e.Message.MentionedUsers.Contains(discord.CurrentUser) && e.Channel.Name == "gentai")
+                if (e.Message.MentionedUsers.Contains(discord.CurrentUser) && Guilds[e.Guild.Id].MarkovWritingChannels.Contains(e.Channel.Id))
                 {
                     //var words2 = collectedMessages[new Random().Next(collectedMessages.Count)].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                     //string startWord = words2[new Random().Next(words2.Length)];
