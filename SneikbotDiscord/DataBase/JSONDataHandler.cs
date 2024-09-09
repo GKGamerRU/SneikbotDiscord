@@ -147,29 +147,6 @@ namespace SneikbotDiscord.DataBase
         //    return null;
         //}
 
-        public async Task<GuildData> SetCustomPrefix(string prefix, ulong guildID)
-        {
-            string path = GetJSONFilePath(DATA_TYPES.GUILD, DATA_CATEGORIES.GuildData, guildID);
-            if (!File.Exists(path))
-            {
-                return null;
-            }
-            else if (File.Exists(path))
-            {
-                //string json = await File.ReadAllTextAsync(path);
-                string json = await Task.Run(() => File.ReadAllText(path));
-
-                GuildData data = JsonConvert.DeserializeObject<GuildData>(json);
-                data.Prefix = prefix;
-                string newjson = JsonConvert.SerializeObject(data);
-                //await File.WriteAllTextAsync(path, newjson);
-                await Task.Run(() => File.WriteAllText(path, newjson));
-                Console.WriteLine("Set Custom Prefix: " + path);
-                return data;
-            }
-            return null;
-        }
-
         //public async Task<PrivateVCUserData> GetAllPrivateVcUserDataFromJSON(ulong userID)
         //{
         //    string path = GetJSONFilePath(DATA_TYPES.USERVC, DATA_CATEGORIES.PrivateVCUserData, userID);
