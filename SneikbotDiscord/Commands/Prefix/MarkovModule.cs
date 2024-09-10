@@ -239,6 +239,26 @@ namespace SneikbotDiscord.Commands.Prefix
 
             await ctx.RespondAsync(builder);
         }
+        [Command("жак")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("Генерирует рандомную цитату Жака Фреско")]
+        public async Task Jacque(CommandContext ctx, string url = null)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            Bitmap bitmap = null;
+            bitmap = Markov.MarkovImage.GenerateJacque(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+
+            var stream = new System.IO.MemoryStream();
+            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            stream.Position = 0;
+
+            var builder = new DiscordMessageBuilder()
+                        .AddFile("test.jpg", stream);
+
+            await ctx.RespondAsync(builder);
+        }
 
         [Command("рецепт")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]

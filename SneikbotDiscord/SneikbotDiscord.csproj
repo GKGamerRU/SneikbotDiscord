@@ -231,6 +231,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\AIProvider.dll" />
+    <None Include="Resources\Jacque.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

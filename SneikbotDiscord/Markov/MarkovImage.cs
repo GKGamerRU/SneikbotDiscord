@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.Entities;
+using SneikbotDiscord.Properties;
 using SneikbotDiscord.Utils;
 using System;
 using System.Drawing;
@@ -23,6 +24,8 @@ namespace SneikbotDiscord.Markov
 
         static Font DemotivatorForeFont = new Font("Times New Roman", 24, FontStyle.Bold);
         static Font DemotivatorBackFont = new Font("Microsoft Sans Serif", 16, FontStyle.Regular);
+
+        static Font JacqueSentense = new Font("Microsoft Sans Serif", 22);
 
         static Pen demotivatorFrame = new Pen(Brushes.White, 2);
 
@@ -83,7 +86,7 @@ namespace SneikbotDiscord.Markov
             if(bitmap == null)
             {
                 picture = new Bitmap(512, 512);
-                foreFont = new Font("Segoe UI", 32, FontStyle.Bold);
+                foreFont = new Font("Segoe UI", 28, FontStyle.Bold);
             }
             else
             {
@@ -110,6 +113,26 @@ namespace SneikbotDiscord.Markov
             // Положение текста: по центру по горизонтали и внизу по вертикали
             PointF position = new PointF(0, 0);
             GraphicsUtils.DrawOutlinedText(gfx, response, foreFont, Color.White, Color.Black, position, picture.Size,StringFormat);
+
+            return picture;
+        }
+
+        public static Bitmap GenerateJacque(DiscordGuild guild, MarkovChain chain)
+        {
+            string response = chain.GenerateSentence(chain.GetRandomStartWord(), new Random().Next(3, 25));
+
+            if (new Random().Next(10) == 0)
+                response = response.ToUpper();
+
+            Bitmap picture = new Bitmap(Resources.Jacque);
+
+            Graphics gfx = Graphics.FromImage(picture);
+            gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            gfx.SmoothingMode = SmoothingMode.AntiAlias;
+
+            // Положение текста: по центру по горизонтали и внизу по вертикали
+            PointF position = new PointF(375, 100);
+            GraphicsUtils.DrawOutlinedText(gfx, response, JacqueSentense, Color.Black, Color.White, position, new SizeF(400,picture.Height - 200), CenterStringFormat);
 
             return picture;
         }
