@@ -83,14 +83,14 @@ namespace SneikbotDiscord.Markov
             if(bitmap == null)
             {
                 picture = new Bitmap(512, 512);
-                foreFont = new Font("Segoe UI", 24, FontStyle.Bold);
+                foreFont = new Font("Segoe UI", 32, FontStyle.Bold);
             }
             else
             {
                 var factor = (float)bitmap.Width / bitmap.Height;
                 picture = new Bitmap((int)(512 * factor), 512);
 
-                foreFont = new Font("Segoe UI", (picture.Height / 21) >= 8 ? picture.Height / 21 : 8, FontStyle.Bold);
+                foreFont = new Font("Segoe UI", (picture.Height / 18) >= 12 ? picture.Height / 21 : 12, FontStyle.Bold);
             }
 
             Graphics gfx = Graphics.FromImage(picture);

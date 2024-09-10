@@ -176,6 +176,7 @@
     <Compile Include="BotConfig\BotConfiguration.cs" />
     <Compile Include="Commands\Prefix\Fun.cs" />
     <Compile Include="Commands\Prefix\MarkovModule.cs" />
+    <Compile Include="Commands\Prefix\Moderation.cs" />
     <Compile Include="Commands\Slash\Basic.cs" />
     <Compile Include="DataBase\ChannelData.cs" />
     <Compile Include="DataBase\GuildData.cs" />

@@ -77,7 +77,7 @@ namespace SneikbotDiscord.Sneik
 
             var commandsConfiguration = new CommandsNextConfiguration
             {
-                StringPrefixes = new string[] { botConfig.Prefix },
+                StringPrefixes = new string[] { },
                 EnableDms = false,
                 EnableMentionPrefix = true,
                 EnableDefaultHelp = false,
@@ -103,6 +103,7 @@ namespace SneikbotDiscord.Sneik
             commands = discord.UseCommandsNext(commandsConfiguration);
             commands.RegisterCommands<Commands.Prefix.Fun>();
             commands.RegisterCommands<Commands.Prefix.MarkovModule>();
+            commands.RegisterCommands<Commands.Prefix.Moderation>();
 
             slash = discord.UseSlashCommands();
             slash.RegisterCommands<Commands.Slash.Basic>();
