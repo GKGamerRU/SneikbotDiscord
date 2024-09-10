@@ -38,7 +38,7 @@ namespace SneikbotDiscord.Sneik
                 Token = botConfig.Token,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents,
-                MinimumLogLevel = LogLevel.Warning,
+                MinimumLogLevel = LogLevel.Warning | LogLevel.Error,
                 AutoReconnect = true,
             });
 
@@ -173,7 +173,7 @@ namespace SneikbotDiscord.Sneik
                     markovChain.Add(guildData.ID, guildMarkov);
                 }
             }
-            MarkovImage.InitMemes();
+            await Task.Run(() => MarkovImage.InitMemes());
 
             OnLog("Bot is connected and ready!");
             await CreatePaths();
@@ -242,10 +242,6 @@ namespace SneikbotDiscord.Sneik
                     {
                         words[i] = word.ToLower();
                     }
-                    //if(word.StartsWith(":") && word.EndsWith(":"))
-                    //{
-                    //    words[i] = word;
-                    //}
                 }
                 markovChain[e.Guild.Id].AddWords(words);
             }
