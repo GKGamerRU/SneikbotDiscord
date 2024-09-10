@@ -239,6 +239,7 @@ namespace SneikbotDiscord.Commands.Prefix
 
             await ctx.RespondAsync(builder);
         }
+
         [Command("жак")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]
         [RequireGuild]
@@ -249,6 +250,27 @@ namespace SneikbotDiscord.Commands.Prefix
 
             Bitmap bitmap = null;
             bitmap = Markov.MarkovImage.GenerateJacque(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+
+            var stream = new System.IO.MemoryStream();
+            bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            stream.Position = 0;
+
+            var builder = new DiscordMessageBuilder()
+                        .AddFile("test.jpg", stream);
+
+            await ctx.RespondAsync(builder);
+        }
+
+        [Command("мем")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("Генерирует мем или мемную историю")]
+        public async Task Meme(CommandContext ctx, string url = null)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            Bitmap bitmap = null;
+            bitmap = Markov.MarkovImage.GenerateComics(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
 
             var stream = new System.IO.MemoryStream();
             bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
@@ -394,6 +416,23 @@ namespace SneikbotDiscord.Commands.Prefix
             await ctx.RespondAsync(builder);
         }
 
+        [Command("спросить")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("генерирует ответ продолжением вашего предложения или слова.")]
+        public async Task AskContinue(CommandContext ctx, params string[] texts)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Random random = new Random();
+
+            var finalSentense1 = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(texts.Last(), random.Next(8, 25)).TrimStart();
+            stringBuilder.AppendLine(finalSentense1.FormatSentence());
+
+            var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());
+            await ctx.RespondAsync(builder);
+        }
 
         [Command("рандомдиалог")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]

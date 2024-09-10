@@ -173,6 +173,7 @@ namespace SneikbotDiscord.Sneik
                     markovChain.Add(guildData.ID, guildMarkov);
                 }
             }
+            MarkovImage.InitMemes();
 
             OnLog("Bot is connected and ready!");
             await CreatePaths();
