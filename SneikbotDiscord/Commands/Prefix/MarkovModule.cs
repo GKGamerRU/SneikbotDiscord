@@ -4,11 +4,13 @@ using DSharpPlus.Entities;
 using SneikbotDiscord.Sneik;
 using SneikbotDiscord.Utils;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SneikbotDiscord.DataBase;
+using System.Drawing.Imaging;
+using System.Windows;
 
 namespace SneikbotDiscord.Commands.Prefix
 {
@@ -39,7 +41,8 @@ namespace SneikbotDiscord.Commands.Prefix
                     var embed = new DiscordEmbedBuilder
                     {
                         Title = "Информация по модулю Markov",
-                        Description = $"**Выучено слов:** {SneikBot.markovChain[ctx.Guild.Id].chain.Count}\n\n" +
+                        Description = $"**Выучено слов:** {SneikBot.markovChain[ctx.Guild.Id].chain.Count}\n" +
+                        $"Изображения сервера: {GuildFilesManager.GetImagesCount(ctx.Guild.Id)}/50\n\n" +
                             $"**Прослушиваемые каналы**: {SneikBot.Guilds[ctx.Guild.Id].MarkovReadingChannels.Count}\n" +
                             $"**Каналы для генерации**: {SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Count}\n" +
                             $"\n" +
@@ -186,15 +189,37 @@ namespace SneikbotDiscord.Commands.Prefix
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName))
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(ctx.Message.Attachments[0].Url);
+                if (GuildFilesManager.GetImagesCount(ctx.Guild.Id) < 50 && bitmap != null)
+                {
+                    GuildFilesManager.SaveImage(ctx.Guild.Id, bitmap, ctx.Message.Attachments[0].FileName);
+                }
                 bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else if (url != null)
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(url);
+                if (GuildFilesManager.GetImagesCount(ctx.Guild.Id) < 50 && bitmap != null)
+                {
+                    string fileName = new Uri(url).PathAndQuery.Replace("/", null).Replace(":", null).Replace(".", null).Replace("?", null).Replace("\\", null);
+                    GuildFilesManager.SaveImage(ctx.Guild.Id, bitmap, fileName);
+                }
                 bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else
-                bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+            {
+                var random = new Random();
+                switch (random.Next(0, 2))
+                {
+                    case 0:
+                        bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        break;
+                    case 1:
+                        bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
 
             var stream = new System.IO.MemoryStream();
@@ -219,15 +244,37 @@ namespace SneikbotDiscord.Commands.Prefix
             if (ctx.Message.Attachments.Count != 0 && ImageUtils.IsImage(ctx.Message.Attachments[0].FileName))
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(ctx.Message.Attachments[0].Url);
+                if (GuildFilesManager.GetImagesCount(ctx.Guild.Id) < 50 && bitmap != null)
+                {
+                    GuildFilesManager.SaveImage(ctx.Guild.Id, bitmap, ctx.Message.Attachments[0].FileName);
+                }
                 bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else if (url != null)
             {
                 bitmap = await ImageUtils.GetImageFromUrlAsync(url);
+                if (GuildFilesManager.GetImagesCount(ctx.Guild.Id) < 50 && bitmap != null)
+                {
+                    string fileName = new Uri(url).PathAndQuery.Replace("/", null).Replace(":", null).Replace(".", null).Replace("?", null).Replace("\\", null);
+                    GuildFilesManager.SaveImage(ctx.Guild.Id, bitmap, fileName);
+                }
                 bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], bitmap);
             }
             else
-                bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+            {
+                var random = new Random();
+                switch (random.Next(0,2))
+                {
+                    case 0:
+                        bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        break;
+                    case 1:
+                        bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
 
             var stream = new System.IO.MemoryStream();

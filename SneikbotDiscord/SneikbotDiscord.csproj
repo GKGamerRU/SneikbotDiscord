@@ -180,6 +180,7 @@
     <Compile Include="Commands\Slash\Basic.cs" />
     <Compile Include="DataBase\ChannelData.cs" />
     <Compile Include="DataBase\GuildData.cs" />
+    <Compile Include="DataBase\GuildFilesManager.cs" />
     <Compile Include="DataBase\JSONDataHandler.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
