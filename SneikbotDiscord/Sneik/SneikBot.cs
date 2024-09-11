@@ -152,7 +152,7 @@ namespace SneikbotDiscord.Sneik
 
             foreach (var guild in sender.Guilds)
             {
-                string markovGuildPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov\\{guild.Key}";
+                string markovGuildPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov";
                 if (Directory.Exists(markovGuildPath) == false)
                 {
                     Directory.CreateDirectory(markovGuildPath);
@@ -171,6 +171,10 @@ namespace SneikbotDiscord.Sneik
                     guildMarkov.ApplyWords(JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(markovWords));
 
                     markovChain.Add(guildData.ID, guildMarkov);
+                }
+                else
+                {
+                    markovChain.Add(guildData.ID, new MarkovChain());
                 }
             }
             await Task.Run(() => MarkovImage.InitMemes());
