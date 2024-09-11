@@ -416,6 +416,44 @@ namespace SneikbotDiscord.Commands.Prefix
             await ctx.RespondAsync(builder);
         }
 
+        [Command("рассказ")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("создает стих из рандомных предложений")]
+        public async Task MakeStory(CommandContext ctx, params string[] texts)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            string text = null;
+            if (texts.Length != 0) text = string.Join(" ", texts);
+            StringBuilder stringBuilder = new StringBuilder();
+            Random random = new Random();
+            var messages = random.Next(8, 16);
+
+            string currentMessage = text;
+            currentMessage = currentMessage != null ? currentMessage : SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(1, 5));
+
+            stringBuilder.AppendLine($"## Рассказ о \"{currentMessage}\"");
+            stringBuilder.AppendLine();
+
+            currentMessage = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(12, 25));
+            stringBuilder.AppendLine(currentMessage.FormatSentence());
+
+            for (int i = 0; i < messages; i++)
+            {
+                var words = currentMessage.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var sentence = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(words[random.Next(words.Length - 1)], random.Next(12, 25));
+                if (sentence == currentMessage || i % 2 == 0)
+                    sentence = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(12, 25));
+
+                stringBuilder.AppendLine(sentence.FormatSentence());
+                currentMessage = sentence;
+            }
+
+            var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());
+            await ctx.RespondAsync(builder);
+        }
+
         [Command("спросить")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]
         [RequireGuild]
@@ -429,6 +467,90 @@ namespace SneikbotDiscord.Commands.Prefix
 
             var finalSentense1 = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(texts.Last(), random.Next(8, 25)).TrimStart();
             stringBuilder.AppendLine(finalSentense1.FormatSentence());
+
+            var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());
+            await ctx.RespondAsync(builder);
+        }
+
+        [Command("видеокарта")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("генерирует рандомное название для видеокарты.")]
+        public async Task NewVideoCardName(CommandContext ctx)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Random random = new Random();
+
+            string vendor = "";
+            switch (random.Next(3))
+            {
+                case 0: vendor = "Intel"; break;
+                case 1: vendor = "Nvidia"; break;
+                case 2: vendor = "AMD"; break;
+                default:
+                    break;
+            }
+
+
+            string serie = "";
+            switch (random.Next(6))
+            {
+                case 0: serie = "GT"; break;
+                case 1: serie = "GTX"; break;
+                case 2: serie = "RTX"; break;
+                case 3: serie = "RX"; break;
+                case 4: serie = "Arc"; break;
+                case 5: serie = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), 1); break;
+                default:
+                    break;
+            }
+
+            var videocard = $"Представляю вам, новая {vendor} {serie} {random.Next(10,999) * 10} ({SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(1,5))}).";
+            stringBuilder.AppendLine(videocard);
+
+            var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());
+            await ctx.RespondAsync(builder);
+        }
+
+        [Command("процессор")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("генерирует рандомное название для процессора.")]
+        public async Task NewCPUName(CommandContext ctx)
+        {
+            if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            Random random = new Random();
+
+            string vendor = "";
+            switch (random.Next(3))
+            {
+                case 0: vendor = "Intel"; break;
+                case 1: vendor = "AMD"; break;
+                case 2: vendor = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), 1); break;
+                default:
+                    break;
+            }
+
+
+            string serie = "";
+            switch (random.Next(6))
+            {
+                case 0: serie = $"I{random.Next(3,10)}"; break;
+                case 1: serie = $"A{random.Next(4, 13)}"; break;
+                case 2: serie = $"Ryzen {random.Next(3, 10)}"; break;
+                case 3: serie = $"Core {random.Next(3, 10)}"; break;
+                case 4: serie = $"Atom {random.Next(3, 10)}"; break;
+                case 5: serie = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), 1); break;
+                default:
+                    break;
+            }
+
+            var videocard = $"Представляю вам, новая {vendor} {serie} {random.Next(3, 100) * 100} ({SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(SneikBot.markovChain[ctx.Guild.Id].GetRandomStartWord(), random.Next(1, 5))}).";
+            stringBuilder.AppendLine(videocard);
 
             var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());
             await ctx.RespondAsync(builder);
