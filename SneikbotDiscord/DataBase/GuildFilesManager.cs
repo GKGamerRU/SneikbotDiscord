@@ -31,6 +31,7 @@ namespace SneikbotDiscord.DataBase
 
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
             var files = directoryInfo.GetFiles();
+
             if (files.Length == 0) return null;
 
             return files[new Random().Next(0, files.Length)].FullName;

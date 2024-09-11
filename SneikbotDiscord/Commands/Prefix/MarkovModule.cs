@@ -211,12 +211,21 @@ namespace SneikbotDiscord.Commands.Prefix
                 switch (random.Next(0, 2))
                 {
                     case 0:
-                        bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        string path = GuildFilesManager.GetRandomImage(ctx.Guild.Id);
+                        if (path != null)
+                        {
+                            bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        }
+                        else
+                        {
+                            if (bitmap == null) bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+                        }
                         break;
                     case 1:
                         bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
                         break;
                     default:
+                        if(bitmap == null) bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
                         break;
                 }
             }
@@ -263,10 +272,18 @@ namespace SneikbotDiscord.Commands.Prefix
             else
             {
                 var random = new Random();
-                switch (random.Next(0,2))
+                switch (random.Next(0, 2))
                 {
                     case 0:
-                        bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        string path = GuildFilesManager.GetRandomImage(ctx.Guild.Id);
+                        if (path != null)
+                        {
+                            bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                        }
+                        else
+                        {
+                            if (bitmap == null) bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
+                        }
                         break;
                     case 1:
                         bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id]);
