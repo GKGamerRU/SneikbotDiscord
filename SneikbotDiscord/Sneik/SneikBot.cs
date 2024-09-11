@@ -51,6 +51,10 @@ namespace SneikbotDiscord.Sneik
                     {
                         Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
                     }
+                    if (markovChain.ContainsKey(e.Guild.Id) == false)
+                    {
+                        markovChain.Add(e.Guild.Id, new MarkovChain());
+                    }
                 };
                     
             discord.ComponentInteractionCreated += async (s, e) =>
