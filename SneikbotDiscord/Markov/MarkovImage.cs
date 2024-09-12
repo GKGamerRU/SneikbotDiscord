@@ -62,8 +62,6 @@ namespace SneikbotDiscord.Markov
 
             if (new Random().Next(10) == 0)
                 response = response.ToUpper();
-            if (new Random().Next(10) == 0)
-                response = response.ToUpper();
 
             var members = guild.GetAllMembersAsync().GetAwaiter().GetResult().Where(mem => mem.AvatarUrl != null);
             DiscordMember member = guild.GetAllMembersAsync().GetAwaiter().GetResult().ElementAt(new Random().Next(members.Count()));
