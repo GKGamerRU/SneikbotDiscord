@@ -61,7 +61,6 @@ namespace SneikbotDiscord.Sneik
             {
                 if (e.Id == "btn_ping")
                 {
-                    //await e.Message.ModifyAsync("Ping button clicked!");
                     await e.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent("Ping button clicked!").AddComponents(new DiscordComponent[]
                         {
                         new DiscordButtonComponent(ButtonStyle.Primary, "btn_ping", "Ping"),
@@ -70,7 +69,6 @@ namespace SneikbotDiscord.Sneik
                 }
                 else if (e.Id == "btn_pong")
                 {
-                    //await e.Message.ModifyAsync("Pong button clicked!");
                     await e.Interaction.CreateResponseAsync(InteractionResponseType.UpdateMessage, new DiscordInteractionResponseBuilder().WithContent("Pong button clicked!").AddComponents(new DiscordComponent[]
                         {
                         new DiscordButtonComponent(ButtonStyle.Primary, "btn_ping", "Ping"),
@@ -89,8 +87,6 @@ namespace SneikbotDiscord.Sneik
                 PrefixResolver = async (msg) =>
                 {
                     var guildId = msg.Channel.GuildId;
-
-                    //var customprefixdata = await jsonHandler.GetAllGuildDataFromJSON((ulong)guildId);
                     var customprefixdata = Guilds[guildId.Value];
 
                     if (customprefixdata.Prefix != null)
@@ -143,7 +139,6 @@ namespace SneikbotDiscord.Sneik
             }
 
             await ModifyBotNickname($"Sneik (выключен {DateTime.Now.ToShortTimeString()} по МСК)",true);
-            //discord.DisconnectAsync().GetAwaiter().GetResult();
         }
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
@@ -226,9 +221,6 @@ namespace SneikbotDiscord.Sneik
             await Task.CompletedTask;
         }
 
-
-
-        //static List<string> collectedMessages = new List<string>();
         private static async Task OnMessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
             if (e.Author.IsBot) return;
@@ -272,9 +264,6 @@ namespace SneikbotDiscord.Sneik
             {
                 if (e.Message.MentionedUsers.Contains(discord.CurrentUser) && Guilds[e.Guild.Id].MarkovWritingChannels.Contains(e.Channel.Id))
                 {
-                    //var words2 = collectedMessages[new Random().Next(collectedMessages.Count)].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    //string startWord = words2[new Random().Next(words2.Length)];
-                    //string response = markovChain.GenerateSentence(startWord, new Random().Next(3,25));
                     string response = markovChain[e.Guild.Id].GenerateSentence(markovChain[e.Guild.Id].GetRandomStartWord(), new Random().Next(3,25));
 
                     if (new Random().Next(10) == 0)

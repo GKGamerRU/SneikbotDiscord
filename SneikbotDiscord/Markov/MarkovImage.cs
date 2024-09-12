@@ -208,7 +208,7 @@ namespace SneikbotDiscord.Markov
                 gfx2.SmoothingMode = SmoothingMode.AntiAlias;
 
                 GraphicsUtils.DrawOutlinedText(gfx2, response, ComicMeme, Color.Black, Color.White, Point.Empty, new SizeF(320, 70), CenterStringFormat);
-                gfx2.DrawImage(meme, new Rectangle(random.Next(120), 240 - meme.Height, meme.Width, meme.Height));
+                gfx2.DrawImage(meme, new Rectangle(random.Next(memFrame.Width - meme.Width), 240 - meme.Height, meme.Width, meme.Height));
                 memes[i] = memFrame;
             }
 
