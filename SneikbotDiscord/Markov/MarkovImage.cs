@@ -63,11 +63,6 @@ namespace SneikbotDiscord.Markov
             if (new Random().Next(10) == 0)
                 response = response.ToUpper();
 
-            var members = guild.GetAllMembersAsync().GetAwaiter().GetResult().Where(mem => mem.AvatarUrl != null);
-            DiscordMember member = guild.GetAllMembersAsync().GetAwaiter().GetResult().ElementAt(new Random().Next(members.Count()));
-
-            string avatarUrl = member.AvatarUrl;
-
             Bitmap picture = new Bitmap(768, 490);
             var rectangle = new Rectangle(80, 30, 607, 350);
             var imageRect = new Rectangle(90, 40, 587, 330);
@@ -81,6 +76,11 @@ namespace SneikbotDiscord.Markov
 
             if (bitmap == null)
             {
+                var members = guild.GetAllMembersAsync().GetAwaiter().GetResult().Where(mem => mem.AvatarUrl != null);
+                DiscordMember member = guild.GetAllMembersAsync().GetAwaiter().GetResult().ElementAt(new Random().Next(members.Count()));
+
+                string avatarUrl = member.AvatarUrl;
+
                 Bitmap avatarBitmap = ImageUtils.GetImageFromUrlAsync(avatarUrl).GetAwaiter().GetResult();
                 gfx.DrawImage(avatarBitmap, imageRect);
             }
@@ -100,11 +100,6 @@ namespace SneikbotDiscord.Markov
 
             if (new Random().Next(10) == 0)
                 response = response.ToUpper();
-
-            var members = guild.GetAllMembersAsync().GetAwaiter().GetResult().Where(mem => mem.AvatarUrl != null);
-            DiscordMember member = guild.GetAllMembersAsync().GetAwaiter().GetResult().ElementAt(new Random().Next(members.Count()));
-
-            string avatarUrl = member.AvatarUrl;
 
             Bitmap picture;
             if(bitmap == null)
@@ -126,6 +121,11 @@ namespace SneikbotDiscord.Markov
             
             if (bitmap == null)
             {
+                var members = guild.GetAllMembersAsync().GetAwaiter().GetResult().Where(mem => mem.AvatarUrl != null);
+                DiscordMember member = guild.GetAllMembersAsync().GetAwaiter().GetResult().ElementAt(new Random().Next(members.Count()));
+
+                string avatarUrl = member.AvatarUrl;
+
                 Bitmap avatarBitmap = ImageUtils.GetImageFromUrlAsync(avatarUrl).GetAwaiter().GetResult(); 
                 gfx.DrawImage(avatarBitmap, gfx.VisibleClipBounds);
             }
