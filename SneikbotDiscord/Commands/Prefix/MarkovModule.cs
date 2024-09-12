@@ -214,7 +214,7 @@ namespace SneikbotDiscord.Commands.Prefix
                         string path = GuildFilesManager.GetRandomImage(ctx.Guild.Id);
                         if (path != null)
                         {
-                            bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                            bitmap = Markov.MarkovImage.GenerateDemotivator(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(path));
                         }
                         else
                         {
@@ -278,7 +278,7 @@ namespace SneikbotDiscord.Commands.Prefix
                         string path = GuildFilesManager.GetRandomImage(ctx.Guild.Id);
                         if (path != null)
                         {
-                            bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(GuildFilesManager.GetRandomImage(ctx.Guild.Id)));
+                            bitmap = Markov.MarkovImage.GenerateBruh(ctx.Guild, SneikBot.markovChain[ctx.Guild.Id], new Bitmap(path));
                         }
                         else
                         {
