@@ -189,6 +189,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Markov\MarkovChain.cs" />
+    <Compile Include="Markov\MarkovConfiguration.cs" />
     <Compile Include="Markov\MarkovImage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Sneik\SneikBot.cs" />

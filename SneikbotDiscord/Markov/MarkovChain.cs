@@ -1,4 +1,5 @@
-﻿using SneikbotDiscord.Utils;
+﻿using SneikbotDiscord.Sneik;
+using SneikbotDiscord.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace SneikbotDiscord.Markov
     public class MarkovChain
     {
         public Dictionary<string, List<string>> chain = new Dictionary<string, List<string>>();
-
+        public ulong GuildID { get; set; }
 
         private Random random = new Random();
         public string GetRandomStartWord()
@@ -24,42 +25,115 @@ namespace SneikbotDiscord.Markov
 
         public void AddWords(string[] words)
         {
-            for (int i = 0; i < words.Length - 1; i++)
+            if (SneikBot.Guilds[GuildID].MarkovConfiguration.isSuperMarkov)
             {
-                if (words[i].ContainsEnds() == false)
+                int wordsInKey = SneikBot.Guilds[GuildID].MarkovConfiguration.WordsInKey;
+                for (int size = words.Length > wordsInKey ? wordsInKey : words.Length - 1; size > 0; size--)
                 {
-                    if (!chain.ContainsKey(words[i]))
+                    //int corrector = size == 0 ? 1 : 0;
+                    for (int i = 0; i < words.Length - size; i++)
                     {
-                        chain[words[i]] = new List<string>();
-                    }
+                        string superWord = "";
+                        for (int x = 0; x < size; x++)
+                        {
+                            if (x == 0)
+                                superWord += words[i + x];
+                            else
+                                superWord += $" {words[i + x]}";
+                        }
 
-                    //if (words[i + 1].isFirstLetterUp() == false)
-                    chain[words[i]].Add(words[i + 1]);
+                        if (superWord.ContainsEnds() == false)
+                        {
+                            if (!chain.ContainsKey(superWord))
+                            {
+                                chain[superWord] = new List<string>();
+                            }
+
+                            chain[superWord].Add(words[i + size]);
+                        }
+                        else
+                        {
+                            words[i + 1] = words[i + 1].ToFirstLetterUp();
+                        }
+                    }
                 }
-                else
+            }
+            else
+            {
+                for (int i = 0; i < words.Length - 1; i++)
                 {
-                    words[i + 1] = words[i + 1].ToFirstLetterUp();
+                    if (words[i].ContainsEnds() == false)
+                    {
+                        if (!chain.ContainsKey(words[i]))
+                        {
+                            chain[words[i]] = new List<string>();
+                        }
+
+                        //if (words[i + 1].isFirstLetterUp() == false)
+                        chain[words[i]].Add(words[i + 1]);
+                    }
+                    else
+                    {
+                        words[i + 1] = words[i + 1].ToFirstLetterUp();
+                    }
                 }
             }
         }
         //TODO: Сделать рандом для продолжения слова
-        public string GenerateSentence(string startWord, int length)
+        public string GenerateSentence(string startWords, int length)
         {
-            List<string> result = new List<string> { startWord };
-            string currentWord = startWord;
-
-            for (int i = 0; i < length - 1; i++)
+            if (SneikBot.Guilds[GuildID].MarkovConfiguration.isSuperMarkov)
             {
-                if (!chain.ContainsKey(currentWord) || chain[currentWord].Count == 0)
-                    break;
-                if (i != 0 && new Random().Next(0, 10) == 0)
-                    continue;
+                List<string> result = new List<string>(startWords.Split());
+                //string currentWord = startWords.Last();
 
-                currentWord = chain[currentWord][random.Next(chain[currentWord].Count)];
-                result.Add(currentWord);
+                for (int i = 0; i < length - 1; i++)
+                {
+                    bool isTriggered = false;
+                    int wordsInKey = SneikBot.Guilds[GuildID].MarkovConfiguration.WordsInKey;
+                    for (int size = result.Count > wordsInKey ? wordsInKey : result.Count; size > 0; size--)
+                    {
+                        string currentWord = "";
+
+                        for (int x = result.Count - size; x < result.Count; x++)
+                        {
+                            if (x == result.Count - size)
+                                currentWord += result[x];
+                            else
+                                currentWord += $" {result[x]}";
+                        }
+
+                        if (chain.ContainsKey(currentWord))
+                        {
+                            currentWord = chain[currentWord][random.Next(chain[currentWord].Count)];
+                            result.Add(currentWord);
+                            isTriggered = true;
+                            break;
+                        }
+                    }
+                    if (isTriggered == false) break;
+                }
+
+                return string.Join(" ", result);
             }
+            else
+            {
+                List<string> result = new List<string> { startWords };
+                string currentWord = startWords;
 
-            return string.Join(" ", result);
+                for (int i = 0; i < length - 1; i++)
+                {
+                    if (!chain.ContainsKey(currentWord) || chain[currentWord].Count == 0)
+                        break;
+                    if (i != 0 && (SneikBot.Guilds[GuildID].MarkovConfiguration.isRandomCut && new Random().Next(0, 10) == 0))
+                        continue;
+
+                    currentWord = chain[currentWord][random.Next(chain[currentWord].Count)];
+                    result.Add(currentWord);
+                }
+
+                return string.Join(" ", result);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SneikbotDiscord.Commands.Prefix
         [Command("марков")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]
         [RequireGuild]
-        [Description("команды модуля \"Markov\" - инфо, читай, забудь, пиши, замолчи, очистись")]
+        [Description("команды модуля \"Markov\" - инфо, читай, забудь, пиши, замолчи, очистись, опция")]
         public async Task MarkovBasic(CommandContext ctx, params string[] texts)
         {
             if(texts.Length == 0)
@@ -31,7 +31,8 @@ namespace SneikbotDiscord.Commands.Prefix
                     $"{prefix}марков забудь - запрещает боту запоминать слова этого канала\n" +
                     $"{prefix}марков пиши - разрешает боту писать в этом канале\n" +
                     $"{prefix}марков замолчи - запрещает боту писать в этом канале\n" +
-                    $"{prefix}марков очистись - стирает память для этого сервера");
+                    $"{prefix}марков очистись - стирает память для этого сервера" +
+                    $"{prefix}марков опция (название опции) (значение) - устанавливает новое значение для опции");
                 return;
             }
             else
@@ -47,7 +48,12 @@ namespace SneikbotDiscord.Commands.Prefix
                             $"**Каналы для генерации**: {SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Count}\n" +
                             $"\n" +
                             $"Данный канал читается? : {SneikBot.Guilds[ctx.Guild.Id].MarkovReadingChannels.Contains(ctx.Channel.Id)}\n" +
-                            $"Данный канал для генерации? : {SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id)}",
+                            $"Данный канал для генерации? : {SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id)}\n" +
+                            $"\n" +
+                            $"## :gear: Опции\n" +
+                            $"**SuperMarkovMode**: {SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isSuperMarkov}\n" +
+                            $"**IsRandomCut**: {SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isRandomCut}\n" +
+                            $"**WordsInKey**: {SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.WordsInKey}",
                         Color = DiscordColor.Orange
                     };
                     await ctx.RespondAsync(embed);
@@ -162,6 +168,82 @@ namespace SneikbotDiscord.Commands.Prefix
                                     Color = DiscordColor.HotPink
                                 };
                                 await ctx.RespondAsync(embed2);
+                            }
+                            break;
+                        case "опция":
+                            switch (texts[1].ToLower())
+                            {
+                                case "supermarkovmode":
+                                    if (bool.TryParse(texts[2].ToLower(), out bool isSuperMode))
+                                    {
+                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isSuperMarkov = isSuperMode;
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = $":white_check_mark: Опция SuperMarkovMode успешно изменена на {isSuperMode}",
+                                            Color = DiscordColor.SpringGreen
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    }
+                                    else
+                                    {
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = ":no_entry: Неверный формат, требуется true или false",
+                                            Color = DiscordColor.HotPink
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    } 
+                                    break;
+                                case "israndomcut":
+                                    if (bool.TryParse(texts[2].ToLower(), out bool isRandomCut))
+                                    {
+                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isRandomCut = isRandomCut;
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = $":white_check_mark: Опция IsRandomCut успешно изменена на {isRandomCut}",
+                                            Color = DiscordColor.SpringGreen
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    }
+                                    else
+                                    {
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = ":no_entry: Неверный формат, требуется true или false",
+                                            Color = DiscordColor.HotPink
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    }
+                                    break;
+                                case "wordsinkey":
+                                    if (int.TryParse(texts[2], out int wordsInKey) && wordsInKey >= 2 && wordsInKey <=3)
+                                    {
+                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.WordsInKey = wordsInKey;
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = $":white_check_mark: Опция WordsInKey успешно изменена на {wordsInKey}",
+                                            Color = DiscordColor.SpringGreen
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    }
+                                    else
+                                    {
+                                        var embed2 = new DiscordEmbedBuilder
+                                        {
+                                            Title = ":no_entry: Неверный формат, требуется цифра 2 или 3",
+                                            Color = DiscordColor.HotPink
+                                        };
+                                        await ctx.RespondAsync(embed2);
+                                    }
+                                    break;
+                                default:
+                                    var embed3 = new DiscordEmbedBuilder
+                                    {
+                                        Title = ":no_entry: Неверный формат, такой опции не существует.",
+                                        Color = DiscordColor.HotPink
+                                    };
+                                    await ctx.RespondAsync(embed3);
+                                    break;
                             }
                             break;
                         default:
@@ -526,10 +608,13 @@ namespace SneikbotDiscord.Commands.Prefix
         {
             if (SneikBot.Guilds[ctx.Guild.Id].MarkovWritingChannels.Contains(ctx.Channel.Id) == false) return;
 
+            string text = null;
+            if (texts.Length != 0) text = string.Join(" ", texts);
+
             StringBuilder stringBuilder = new StringBuilder();
             Random random = new Random();
 
-            var finalSentense1 = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(texts.Last(), random.Next(8, 25)).TrimStart();
+            var finalSentense1 = SneikBot.markovChain[ctx.Guild.Id].GenerateSentence(text, random.Next(8, 25)).TrimStart();
             stringBuilder.AppendLine(finalSentense1.FormatSentence());
 
             var builder = new DiscordMessageBuilder().WithContent(stringBuilder.ToString());

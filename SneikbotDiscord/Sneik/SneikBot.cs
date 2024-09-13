@@ -166,14 +166,14 @@ namespace SneikbotDiscord.Sneik
                 if (File.Exists(path))
                 {
                     var markovWords = File.ReadAllText(path);
-                    var guildMarkov = new MarkovChain();
+                    var guildMarkov = new MarkovChain() { GuildID = guildData.ID };
                     guildMarkov.ApplyWords(JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(markovWords));
 
                     markovChain.Add(guildData.ID, guildMarkov);
                 }
                 else
                 {
-                    markovChain.Add(guildData.ID, new MarkovChain());
+                    markovChain.Add(guildData.ID, new MarkovChain() { GuildID = guildData.ID });
                 }
             }
             await Task.Run(() => MarkovImage.InitMemes());
