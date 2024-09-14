@@ -171,79 +171,23 @@ namespace SneikbotDiscord.Commands.Prefix
                             }
                             break;
                         case "опция":
-                            switch (texts[1].ToLower())
+                            if(SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.TryExecuteOption(ctx, texts[1], texts[2], out string message))
                             {
-                                case "supermarkovmode":
-                                    if (bool.TryParse(texts[2].ToLower(), out bool isSuperMode))
-                                    {
-                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isSuperMarkov = isSuperMode;
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = $":white_check_mark: Опция SuperMarkovMode успешно изменена на {isSuperMode}",
-                                            Color = DiscordColor.SpringGreen
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    }
-                                    else
-                                    {
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = ":no_entry: Неверный формат, требуется true или false",
-                                            Color = DiscordColor.HotPink
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    } 
-                                    break;
-                                case "israndomcut":
-                                    if (bool.TryParse(texts[2].ToLower(), out bool isRandomCut))
-                                    {
-                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.isRandomCut = isRandomCut;
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = $":white_check_mark: Опция IsRandomCut успешно изменена на {isRandomCut}",
-                                            Color = DiscordColor.SpringGreen
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    }
-                                    else
-                                    {
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = ":no_entry: Неверный формат, требуется true или false",
-                                            Color = DiscordColor.HotPink
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    }
-                                    break;
-                                case "wordsinkey":
-                                    if (int.TryParse(texts[2], out int wordsInKey) && wordsInKey >= 2 && wordsInKey <=3)
-                                    {
-                                        SneikBot.Guilds[ctx.Guild.Id].MarkovConfiguration.WordsInKey = wordsInKey;
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = $":white_check_mark: Опция WordsInKey успешно изменена на {wordsInKey}",
-                                            Color = DiscordColor.SpringGreen
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    }
-                                    else
-                                    {
-                                        var embed2 = new DiscordEmbedBuilder
-                                        {
-                                            Title = ":no_entry: Неверный формат, требуется цифра 2 или 3",
-                                            Color = DiscordColor.HotPink
-                                        };
-                                        await ctx.RespondAsync(embed2);
-                                    }
-                                    break;
-                                default:
-                                    var embed3 = new DiscordEmbedBuilder
-                                    {
-                                        Title = ":no_entry: Неверный формат, такой опции не существует.",
-                                        Color = DiscordColor.HotPink
-                                    };
-                                    await ctx.RespondAsync(embed3);
-                                    break;
+                                var embed2 = new DiscordEmbedBuilder
+                                {
+                                    Title = $":white_check_mark: {message}",
+                                    Color = DiscordColor.SpringGreen
+                                };
+                                await ctx.RespondAsync(embed2);
+                            }
+                            else
+                            {
+                                var embed2 = new DiscordEmbedBuilder
+                                {
+                                    Title = $":no_entry: {message}",
+                                    Color = DiscordColor.HotPink
+                                };
+                                await ctx.RespondAsync(embed2);
                             }
                             break;
                         default:
