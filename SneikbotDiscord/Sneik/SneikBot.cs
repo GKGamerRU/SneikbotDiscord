@@ -49,6 +49,7 @@ namespace SneikbotDiscord.Sneik
                 if (Guilds.ContainsKey(e.Guild.Id) == false)
                 {
                     Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
+                    OnLog($"NEW Server Detected: {e.Guild.Name}");
                 }
                 if (markovChain.ContainsKey(e.Guild.Id) == false)
                 {

@@ -147,9 +147,9 @@ namespace SneikbotDiscord.Commands.Prefix
                             }
                             break;
                         case "очистись":
-                            if (SneikBot.markovChain[ctx.Channel.Id].chain.Count != 0)
+                            if (SneikBot.markovChain[ctx.Guild.Id].chain.Count != 0)
                             {
-                                SneikBot.markovChain[ctx.Channel.Id].chain.Clear();
+                                SneikBot.markovChain[ctx.Guild.Id].chain.Clear();
                                 var embed2 = new DiscordEmbedBuilder
                                 {
                                     Title = ":white_check_mark: Память успешно очищена",
