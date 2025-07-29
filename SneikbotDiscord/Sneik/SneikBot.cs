@@ -14,6 +14,7 @@ using SneikbotDiscord.Markov;
 using Newtonsoft.Json;
 using SneikbotDiscord.Utils;
 using SneikbotDiscord.DataBase;
+using DSharpPlus.AsyncEvents;
 
 namespace SneikbotDiscord.Sneik
 {
@@ -29,6 +30,7 @@ namespace SneikbotDiscord.Sneik
 
         public static Dictionary<ulong, GuildData> Guilds = new Dictionary<ulong, GuildData>();
 
+        private static bool _isReady = false;
         public static async Task Start()
         {
             var botConfig = BotConfiguration.LoadConfig();
@@ -37,26 +39,29 @@ namespace SneikbotDiscord.Sneik
             {
                 Token = botConfig.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents | DiscordIntents.GuildMembers,
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents | DiscordIntents.GuildMembers | DiscordIntents.Guilds,
                 MinimumLogLevel = LogLevel.Warning | LogLevel.Error,
                 AutoReconnect = true,
             });
 
+            AsyncEventHandler<DiscordClient, GuildCreateEventArgs> addNew = async (s, e) =>
+            {
+                if (Guilds.ContainsKey(e.Guild.Id) == false)
+                {
+                    Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
+                }
+                if (markovChain.ContainsKey(e.Guild.Id) == false)
+                {
+                    markovChain.Add(e.Guild.Id, new MarkovChain() { GuildID = e.Guild.Id });
+                }
+                await Task.CompletedTask;
+            };
+
             discord.Ready += OnReady;
             discord.MessageCreated += OnMessageCreated;
-            discord.GuildAvailable +=
-                async (s, e) =>
-                {
-                    if (Guilds.ContainsKey(e.Guild.Id) == false)
-                    {
-                        Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
-                    }
-                    if (markovChain.ContainsKey(e.Guild.Id) == false)
-                    {
-                        markovChain.Add(e.Guild.Id, new MarkovChain());
-                    }
-                };
-                    
+            discord.GuildAvailable += addNew;
+            discord.GuildCreated += addNew;
+            
             discord.ComponentInteractionCreated += async (s, e) =>
             {
                 if (e.Id == "btn_ping")
@@ -146,6 +151,7 @@ namespace SneikbotDiscord.Sneik
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
         {
+            _isReady = true;
             string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov";
             if (Directory.Exists(markovPath) == false)
             {
