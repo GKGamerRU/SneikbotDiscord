@@ -37,7 +37,7 @@ namespace SneikbotDiscord.Sneik
             {
                 Token = botConfig.Token,
                 TokenType = TokenType.Bot,
-                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents,
+                Intents = DiscordIntents.AllUnprivileged | DiscordIntents.MessageContents | DiscordIntents.GuildMembers,
                 MinimumLogLevel = LogLevel.Warning | LogLevel.Error,
                 AutoReconnect = true,
             });
@@ -80,12 +80,15 @@ namespace SneikbotDiscord.Sneik
             var commandsConfiguration = new CommandsNextConfiguration
             {
                 StringPrefixes = new string[] { },
-                EnableDms = false,
+                EnableDms = true,
                 EnableMentionPrefix = true,
                 EnableDefaultHelp = false,
 
                 PrefixResolver = async (msg) =>
                 {
+                    if(msg.Channel.IsPrivate)
+                        return msg.GetStringPrefixLength("!");
+
                     var guildId = msg.Channel.GuildId;
                     var customprefixdata = Guilds[guildId.Value];
 
@@ -224,10 +227,19 @@ namespace SneikbotDiscord.Sneik
         private static async Task OnMessageCreated(DiscordClient sender, MessageCreateEventArgs e)
         {
             if (e.Author.IsBot) return;
-            OnLog($"Server {e.Guild.Name} -> {e.Channel.Name} -> {e.Author.Username}: {e.Message.Content}");
+            if (e.Channel.IsPrivate)
+            {
+                OnLog($"[PrivateChannel] {e.Author.Username}: {e.Message.Content}");
+
+                if (e.Message.Content == "привет") await e.Message.RespondAsync("Приветствую!");
+            }
+            else
+            {
+                OnLog($"Server {e.Guild.Name} -> {e.Channel.Name} -> {e.Author.Username}: {e.Message.Content}");
+            }
             
             // Сохраняем сообщения
-            if (e.Message.Content.StartsWith(Guilds[e.Guild.Id].Prefix) == false && Guilds[e.Guild.Id].MarkovReadingChannels.Contains(e.Channel.Id))
+            if (e.Channel.IsPrivate == false && e.Message.Content.StartsWith(Guilds[e.Guild.Id].Prefix) == false && Guilds[e.Guild.Id].MarkovReadingChannels.Contains(e.Channel.Id))
             {
                 string sentence = e.Message.Content.FormatSentence().Replace("\n", " ");
 
@@ -246,13 +258,13 @@ namespace SneikbotDiscord.Sneik
                 markovChain[e.Guild.Id].AddWords(words);
             }
             
-            if (e.Message.Content.ToLower().StartsWith("ping") && e.Message.MentionedUsers.Contains(discord.CurrentUser))
+            if ((e.Message.Content.ToLower().StartsWith("ping") && e.Channel.IsPrivate == true) || (e.Message.Content.ToLower().StartsWith("ping") && e.Message.MentionedUsers.Contains(discord.CurrentUser)))
             {
                 await e.Message.RespondAsync(CreatePong("Pong!"));
             }else if (e.Message.Content.ToLower().Contains("sneik"))
             {
                 await e.Message.ModifyAsync(e.Message.Content.ToLower().Replace("sneik", "||sneik||"));
-            }else if (e.Message.MentionedUsers.Contains(discord.CurrentUser) && e.Message.Content.ToLower().Contains("покажи мордочку"))
+            }else if ((e.Channel.IsPrivate == true && e.Message.Content.ToLower().Contains("покажи мордочку")) || (e.Message.MentionedUsers.Contains(discord.CurrentUser) && e.Message.Content.ToLower().Contains("покажи мордочку")))
             {
                 var builder = new DiscordMessageBuilder()
                         .WithContent($"{e.Author.Mention} Вот он я")
@@ -272,13 +284,6 @@ namespace SneikbotDiscord.Sneik
                     await e.Message.RespondAsync(response);
                 }
             }
-            //if (e.Message.Content.ToLower().StartsWith("!dm"))
-            //{
-            //    // Отправка ЛС
-            //    e.Guild.Members.TryGetValue(e.Author.Id, out var member);
-            //    var dmChannel = await member.CreateDmChannelAsync();
-            //    await dmChannel.SendMessageAsync("Привет! Это личное сообщение от бота.");
-            //}
         }
 
         private static async Task ModifyBotNickname(string newNick, bool isEnd = false)

@@ -5,12 +5,9 @@ using SneikbotDiscord.Sneik;
 using SneikbotDiscord.Utils;
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SneikbotDiscord.DataBase;
-using System.Drawing.Imaging;
-using System.Windows;
 
 namespace SneikbotDiscord.Commands.Prefix
 {

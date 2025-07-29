@@ -2,10 +2,6 @@
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SneikbotDiscord.Sneik;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SneikbotDiscord.Commands.Prefix

@@ -7,12 +7,10 @@ using SneikbotDiscord.Sneik;
 using SneikbotDiscord.Utils;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace SneikbotDiscord.Commands.Prefix
 {
@@ -38,7 +36,7 @@ namespace SneikbotDiscord.Commands.Prefix
             providers[4].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
             providers[5].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
 
-            autoProvider.AddService(providers[2],"None","Llava-phi3:latest");
+            autoProvider.AddService(providers[2],"None","Gemma3:12b");
             autoProvider.AddService(providers[3], "None", null);
             autoProvider.AddService(providers[0], "Liaobots", "claude-3-sonnet-20240229");
             autoProvider.AddService(providers[0], "Blackbox", null);
@@ -87,7 +85,6 @@ namespace SneikbotDiscord.Commands.Prefix
 
         [Command("coin")]
         [Cooldown(1, 5, CooldownBucketType.Channel)]
-        [RequireGuild]
         [Description("Подбрасывает монетку")]
         public async Task CoinFlip(CommandContext ctx)
         {
@@ -162,9 +159,18 @@ namespace SneikbotDiscord.Commands.Prefix
             await ctx.RespondAsync(embed: messageBuilder);
         }
 
+        [Command("dm")]
+        [Cooldown(1, 5, CooldownBucketType.Channel)]
+        [RequireGuild]
+        [Description("Try create Private Channel")]
+        public async Task dm(CommandContext ctx)
+        {
+            var dmChannel = await ctx.Member.CreateDmChannelAsync();
+            await dmChannel.SendMessageAsync("Привет! Это личное сообщение от бота.");
+        }
+
         [Command("crashword")]
         [Cooldown(1,5,CooldownBucketType.Channel)]
-        [RequireGuild]
         [Description("УДаляет несколько символов в нескольких местах")]
         public async Task CrashWord(CommandContext ctx, params string[] texts)
         {
