@@ -30,7 +30,6 @@ namespace SneikbotDiscord.Sneik
 
         public static Dictionary<ulong, GuildData> Guilds = new Dictionary<ulong, GuildData>();
 
-        private static bool _isReady = false;
         public static async Task Start()
         {
             var botConfig = BotConfiguration.LoadConfig();
@@ -152,7 +151,6 @@ namespace SneikbotDiscord.Sneik
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
         {
-            _isReady = true;
             string markovPath = $"{AppDomain.CurrentDomain.BaseDirectory}\\Markov";
             if (Directory.Exists(markovPath) == false)
             {
@@ -208,23 +206,24 @@ namespace SneikbotDiscord.Sneik
         }
         public static async Task CreatePaths()
         {
-            //var vc = JSONDataHandler.DATA_TYPES.USERVC;
             var guild = JSONDataHandler.DATA_TYPES.GUILD;
-            //var category = JSONDataHandler.DATA_TYPES.CATEGORY;
             var channel = JSONDataHandler.DATA_TYPES.CHANNEL;
+            //var vc = JSONDataHandler.DATA_TYPES.USERVC;
+            //var category = JSONDataHandler.DATA_TYPES.CATEGORY;
             //var role = JSONDataHandler.DATA_TYPES.ROLE;
             //var message = JSONDataHandler.DATA_TYPES.MESSAGE;
-            //var vccategory = JSONDataHandler.DATA_CATEGORIES.PrivateVCUserData;
+
             var guildcategory = JSONDataHandler.DATA_CATEGORIES.GuildData;
-            //var categorycategory = JSONDataHandler.DATA_CATEGORIES.CategoryData;
             var channelcategory = JSONDataHandler.DATA_CATEGORIES.ChannelData;
+            //var vccategory = JSONDataHandler.DATA_CATEGORIES.PrivateVCUserData;
+            //var categorycategory = JSONDataHandler.DATA_CATEGORIES.CategoryData;
             //var rolecategory = JSONDataHandler.DATA_CATEGORIES.RoleData;
             //var messagecategory = JSONDataHandler.DATA_CATEGORIES.MessageData;
 
-            //jsonHandler.CreatePathIfNotExists(vc, vccategory);
             jsonHandler.CreatePathIfNotExists(guild, guildcategory);
-            //jsonHandler.CreatePathIfNotExists(category, categorycategory);
             jsonHandler.CreatePathIfNotExists(channel, channelcategory);
+            //jsonHandler.CreatePathIfNotExists(vc, vccategory);
+            //jsonHandler.CreatePathIfNotExists(category, categorycategory);
             //jsonHandler.CreatePathIfNotExists(role, rolecategory);
             //jsonHandler.CreatePathIfNotExists(message, messagecategory);
 

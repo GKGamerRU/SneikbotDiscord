@@ -27,17 +27,6 @@ namespace SneikbotDiscord.DataBase
             CategoryData
         }
 
-        //public DATA_TYPES GetTypes(DATA_TYPES type)
-        //{
-        //    return type;
-        //}
-
-        //public DATA_CATEGORIES GetCategories(DATA_CATEGORIES category)
-        //{
-        //    return category;
-        //}
-
-
         public string CreatePathIfNotExists(DATA_TYPES type, DATA_CATEGORIES category)
         {
             string path = $"{AppDomain.CurrentDomain.BaseDirectory}\\DataBase\\{type}\\{category}";

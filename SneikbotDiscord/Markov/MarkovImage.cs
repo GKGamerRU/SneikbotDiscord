@@ -26,7 +26,6 @@ namespace SneikbotDiscord.Markov
             foreach (var meme in directoryInfo.EnumerateFiles()) {
                 Bitmap temp = new Bitmap(meme.FullName);
                 float factorX = (float)temp.Height / temp.Width;
-                //SizeF newSize = new SizeF(temp.Height / factor, temp.Width / factor);
                 SizeF newSize = new SizeF(170 / factorX, 170);
 
                 Memes.Add(new Bitmap(temp,newSize.ToSize()));
@@ -162,11 +161,6 @@ namespace SneikbotDiscord.Markov
 
         public static Bitmap GenerateComics(DiscordGuild guild, MarkovChain chain)
         {
-            //string response = chain.GenerateSentence(chain.GetRandomStartWord(), new Random().Next(3, 25));
-
-            //if (new Random().Next(10) == 0)
-            //    response = response.ToUpper();
-
             Random random = new Random();
             int count = random.Next(1, 5);
             if (count == 3) count = 4;
@@ -216,8 +210,6 @@ namespace SneikbotDiscord.Markov
 
             if(count > 1)gfx.DrawLine(Pens.Gray, MainPage.Width / 2, 0, MainPage.Width / 2, MainPage.Height);
             if(count > 3) gfx.DrawLine(Pens.Gray, 0, MainPage.Height / 2, MainPage.Width, MainPage.Height / 2);
-            // Положение текста: по центру по горизонтали и внизу по вертикали
-            //GraphicsUtils.DrawOutlinedText(gfx, response, JacqueSentense, Color.Black, Color.White, position, new SizeF(400, picture.Height - 200), CenterStringFormat);
 
             return MainPage;
         }
