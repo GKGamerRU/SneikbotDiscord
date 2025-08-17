@@ -1,7 +1,10 @@
-﻿using SneikbotDiscord.Commands.Prefix;
+﻿using DSharpPlus;
+using SneikbotDiscord.BotConfig;
+using SneikbotDiscord.Commands.Prefix;
 using SneikbotDiscord.Sneik;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -25,7 +28,7 @@ namespace SneikbotDiscord
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             //SneikBot.Stop();
-            //Task.Run(SneikBot.Stop).GetAwaiter().GetResult();
+            Task.Run(SneikBot.Stop).GetAwaiter().GetResult();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -33,7 +36,16 @@ namespace SneikbotDiscord
             SneikBot.OnLog += delegate (string message) {
                 AddMessage(message);
             };
-            //Task.Run(SneikBot.Start);
+            SneikBot.OnServersListUpdate += delegate(DiscordClient client) { ServersLabel.Text = string.Join(Environment.NewLine, client.Guilds.Select(s=> s.Value.Name)); };
+
+            SneikBot.botConfig = BotConfiguration.LoadConfig();
+            IPAdressTextbox.Text = SneikBot.botConfig.NeuralAdresse;
+            ModelNameTextBox.Text = SneikBot.botConfig.ModelProvider;
+            SystemPromptTextbox.Text = SneikBot.botConfig.SystemPrompt;
+            ProviderCombo.Text = SneikBot.botConfig.LocalNeuralProvider;
+            Fun.ApplyLocalProvider();
+
+            Task.Run(SneikBot.Start);
         }
 
         List<string> messages = new List<string>();
@@ -50,6 +62,17 @@ namespace SneikbotDiscord
             // Прокручиваем вниз
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private void ApplyNeuralButton_Click(object sender, EventArgs e)
+        {
+            SneikBot.botConfig.NeuralAdresse = IPAdressTextbox.Text;
+            SneikBot.botConfig.ModelProvider = ModelNameTextBox.Text;
+            SneikBot.botConfig.SystemPrompt = SystemPromptTextbox.Text;
+            SneikBot.botConfig.LocalNeuralProvider = ProviderCombo.Text;
+
+            Fun.ApplyLocalProvider();
+            BotConfiguration.SaveConfig(SneikBot.botConfig);
         }
     }
 }

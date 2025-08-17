@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
@@ -10,6 +9,18 @@ namespace SneikbotDiscord.BotConfig
     {
         public string Token { get; set; }
         public string Prefix { get; set; }
+
+        public string NeuralAdresse { get; set; } = "localhost:11434";
+        public string LocalNeuralProvider { get; set; } = "ollama";
+        public string ModelProvider { get; set; } = "qwen3:8b";
+        public string SystemPrompt { get; set; } = "Ты дружелюбный и полезный локальный ассистент. Отвечай кратко и по делу. Используй Markdown для форматирования и оформляй код в блоки с тройными обратными апострофами для общения в discord.";
+
+        public static void SaveConfig(BotConfiguration configuration) { 
+            var json = JsonConvert.SerializeObject(configuration);
+
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
+            File.WriteAllText(path, json);
+        }
 
         public static BotConfiguration LoadConfig()
         {

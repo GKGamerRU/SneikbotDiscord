@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using SneikbotDiscord.Utils;
 using SneikbotDiscord.DataBase;
 using DSharpPlus.AsyncEvents;
+using SneikbotDiscord.Commands.Prefix;
 
 namespace SneikbotDiscord.Sneik
 {
@@ -32,10 +33,9 @@ namespace SneikbotDiscord.Sneik
 
         public static event Action<DiscordClient> OnServersListUpdate = delegate { };
 
+        public static BotConfiguration botConfig = null;
         public static async Task Start()
         {
-            var botConfig = BotConfiguration.LoadConfig();
-
             discord = new DiscordClient(new DiscordConfiguration
             {
                 Token = botConfig.Token,
@@ -302,7 +302,11 @@ namespace SneikbotDiscord.Sneik
             foreach (var guild in discord.Guilds)
             {
                 var currentMember = await guild.Value.GetMemberAsync(discord.CurrentUser.Id);
-                await currentMember.ModifyAsync(x => x.Nickname = newNick);
+                try
+                {
+                    await currentMember.ModifyAsync(x => x.Nickname = newNick);
+                }
+                catch (Exception e) { }
             }
 
             OnLog("Ник заменен");

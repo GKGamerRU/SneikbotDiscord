@@ -16,35 +16,50 @@ namespace SneikbotDiscord.Commands.Prefix
 {
     public sealed class Fun : BaseCommandModule
     {
-        static List<BaseProvider> providers;
-        static AutoProvider autoProvider = new AutoProvider();
+        //static List<BaseProvider> providers;
+        //static AutoProvider autoProvider = new AutoProvider();
+
+        static LmStudioProvider lmStudioProvider = new LmStudioProvider();
+        static OllamaProvider ollamaProvider = new OllamaProvider();
+
+        public static void ApplyLocalProvider()
+        {
+            if (SneikBot.botConfig.LocalNeuralProvider == "ollama")
+            {
+                ollamaProvider.SetSystemPrompt(SneikBot.botConfig.SystemPrompt);
+            }
+            else if (SneikBot.botConfig.LocalNeuralProvider == "lm studio")
+            {
+                lmStudioProvider.SetSystemPrompt(SneikBot.botConfig.SystemPrompt);
+            }
+        }
         public static void ApplyAuto()
         {
-            providers = new List<BaseProvider>()
-            { 
-                new AIProvider.Providers.gpt4free(),
-                new AIProvider.Providers.Kobolt(),
-                new AIProvider.Providers.Ollama(),
-                new BlackBox(),
-                new PizzaGPT(),
-                new Zephyr()
-            };
-            providers[0].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
-            providers[1].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
-            providers[2].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
-            providers[3].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
-            providers[4].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
-            providers[5].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers = new List<BaseProvider>()
+            //{ 
+            //    new AIProvider.Providers.gpt4free(),
+            //    new AIProvider.Providers.Kobolt(),
+            //    new AIProvider.Providers.Ollama(),
+            //    new BlackBox(),
+            //    new PizzaGPT(),
+            //    new Zephyr()
+            //};
+            //providers[0].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers[1].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers[2].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers[3].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers[4].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
+            //providers[5].SystemPrompt = "assistent представляется как Снейк - добрый, умный, хитрый и игривый удав. Отвечает кратко собеседнику на его языке.";
 
-            autoProvider.AddService(providers[2],"None","Gemma3:12b");
-            autoProvider.AddService(providers[3], "None", null);
-            autoProvider.AddService(providers[0], "Liaobots", "claude-3-sonnet-20240229");
-            autoProvider.AddService(providers[0], "Blackbox", null);
-            autoProvider.AddService(providers[0], "HuggingFace", "mistralai/Mixtral-8x7B-Instruct-v0.1");
-            autoProvider.AddService(providers[0], "HuggingFace", "mistralai/Mistral-7B-Instruct-v0.2");
-            autoProvider.AddService(providers[0], "Pi", null);
-            autoProvider.AddService(providers[4], "None", null);
-            autoProvider.AddService(providers[5], "None", null);
+            //autoProvider.AddService(providers[2],"None","Gemma3:12b");
+            //autoProvider.AddService(providers[3], "None", null);
+            //autoProvider.AddService(providers[0], "Liaobots", "claude-3-sonnet-20240229");
+            //autoProvider.AddService(providers[0], "Blackbox", null);
+            //autoProvider.AddService(providers[0], "HuggingFace", "mistralai/Mixtral-8x7B-Instruct-v0.1");
+            //autoProvider.AddService(providers[0], "HuggingFace", "mistralai/Mistral-7B-Instruct-v0.2");
+            //autoProvider.AddService(providers[0], "Pi", null);
+            //autoProvider.AddService(providers[4], "None", null);
+            //autoProvider.AddService(providers[5], "None", null);
         }
 
         [Command("ping")]
@@ -132,8 +147,17 @@ namespace SneikbotDiscord.Commands.Prefix
             }
 
             dsMessage = await dsMessage.ModifyAsync(":hourglass_flowing_sand:`Генерирую ответ... Это займет 1-5 минут...`");
-            var result = await autoProvider.SendMessage(prompt, false);
-            
+
+            Response result = new Response() { message = "AI is inactive now.", isError = true };
+            if(SneikBot.botConfig.LocalNeuralProvider == "ollama")
+            {
+                result = await ollamaProvider.SendMessageAsync(prompt, false);
+            } 
+            else if (SneikBot.botConfig.LocalNeuralProvider == "lm studio")
+            {
+                result = await lmStudioProvider.SendMessageAsync(prompt, false);
+            }
+
             await dsMessage.ModifyAsync(new DiscordMessageBuilder().WithContent($"{ctx.Member.Mention} {result.message}"));
             isProcessing = false;
         }

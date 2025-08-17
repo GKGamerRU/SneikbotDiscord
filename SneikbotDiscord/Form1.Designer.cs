@@ -31,26 +31,28 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.LogButton = new System.Windows.Forms.Button();
-            this.ServersButton = new System.Windows.Forms.Button();
             this.NeuralButton = new System.Windows.Forms.Button();
+            this.ServersButton = new System.Windows.Forms.Button();
+            this.LogButton = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.ServersLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.IPAdressTextbox = new System.Windows.Forms.TextBox();
-            this.ModelNameTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.ApplyNeuralButton = new System.Windows.Forms.Button();
             this.SystemPromptTextbox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.ModelNameTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.IPAdressTextbox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ProviderCombo = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,15 +95,15 @@
             this.panel1.Size = new System.Drawing.Size(250, 461);
             this.panel1.TabIndex = 2;
             // 
-            // LogButton
+            // NeuralButton
             // 
-            this.LogButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.LogButton.Location = new System.Drawing.Point(3, 79);
-            this.LogButton.Name = "LogButton";
-            this.LogButton.Size = new System.Drawing.Size(244, 36);
-            this.LogButton.TabIndex = 1;
-            this.LogButton.Text = "Log";
-            this.LogButton.UseVisualStyleBackColor = true;
+            this.NeuralButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.NeuralButton.Location = new System.Drawing.Point(3, 163);
+            this.NeuralButton.Name = "NeuralButton";
+            this.NeuralButton.Size = new System.Drawing.Size(244, 36);
+            this.NeuralButton.TabIndex = 3;
+            this.NeuralButton.Text = "AI Settings";
+            this.NeuralButton.UseVisualStyleBackColor = true;
             // 
             // ServersButton
             // 
@@ -113,15 +115,25 @@
             this.ServersButton.Text = "Servers";
             this.ServersButton.UseVisualStyleBackColor = true;
             // 
-            // NeuralButton
+            // LogButton
             // 
-            this.NeuralButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.NeuralButton.Location = new System.Drawing.Point(3, 163);
-            this.NeuralButton.Name = "NeuralButton";
-            this.NeuralButton.Size = new System.Drawing.Size(244, 36);
-            this.NeuralButton.TabIndex = 3;
-            this.NeuralButton.Text = "AI Settings";
-            this.NeuralButton.UseVisualStyleBackColor = true;
+            this.LogButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LogButton.Location = new System.Drawing.Point(3, 79);
+            this.LogButton.Name = "LogButton";
+            this.LogButton.Size = new System.Drawing.Size(244, 36);
+            this.LogButton.TabIndex = 1;
+            this.LogButton.Text = "Log";
+            this.LogButton.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::SneikbotDiscord.Properties.Resources.SneikBot;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(244, 70);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // tabControl1
             // 
@@ -165,18 +177,20 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // pictureBox1
+            // ServersLabel
             // 
-            this.pictureBox1.Image = global::SneikbotDiscord.Properties.Resources.SneikBot;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(244, 70);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.ServersLabel.AutoSize = true;
+            this.ServersLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ServersLabel.Location = new System.Drawing.Point(6, 3);
+            this.ServersLabel.Name = "ServersLabel";
+            this.ServersLabel.Size = new System.Drawing.Size(70, 25);
+            this.ServersLabel.TabIndex = 0;
+            this.ServersLabel.Text = "label2";
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.ProviderCombo);
+            this.tabPage3.Controls.Add(this.ApplyNeuralButton);
             this.tabPage3.Controls.Add(this.SystemPromptTextbox);
             this.tabPage3.Controls.Add(this.label4);
             this.tabPage3.Controls.Add(this.ModelNameTextBox);
@@ -190,34 +204,38 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // ServersLabel
+            // ApplyNeuralButton
             // 
-            this.ServersLabel.AutoSize = true;
-            this.ServersLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ServersLabel.Location = new System.Drawing.Point(6, 3);
-            this.ServersLabel.Name = "ServersLabel";
-            this.ServersLabel.Size = new System.Drawing.Size(70, 25);
-            this.ServersLabel.TabIndex = 0;
-            this.ServersLabel.Text = "label2";
+            this.ApplyNeuralButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.ApplyNeuralButton.Location = new System.Drawing.Point(50, 353);
+            this.ApplyNeuralButton.Name = "ApplyNeuralButton";
+            this.ApplyNeuralButton.Size = new System.Drawing.Size(268, 27);
+            this.ApplyNeuralButton.TabIndex = 6;
+            this.ApplyNeuralButton.Text = "Применить и сохранить";
+            this.ApplyNeuralButton.UseVisualStyleBackColor = true;
+            this.ApplyNeuralButton.Click += new System.EventHandler(this.ApplyNeuralButton_Click);
             // 
-            // label2
+            // SystemPromptTextbox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 10);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "IP Adress for Local LM";
-            // 
-            // IPAdressTextbox
-            // 
-            this.IPAdressTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.SystemPromptTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.IPAdressTextbox.Location = new System.Drawing.Point(15, 26);
-            this.IPAdressTextbox.Name = "IPAdressTextbox";
-            this.IPAdressTextbox.Size = new System.Drawing.Size(336, 20);
-            this.IPAdressTextbox.TabIndex = 1;
-            this.IPAdressTextbox.Text = "https://localhost:11434";
+            this.SystemPromptTextbox.Location = new System.Drawing.Point(15, 148);
+            this.SystemPromptTextbox.Multiline = true;
+            this.SystemPromptTextbox.Name = "SystemPromptTextbox";
+            this.SystemPromptTextbox.Size = new System.Drawing.Size(336, 199);
+            this.SystemPromptTextbox.TabIndex = 5;
+            this.SystemPromptTextbox.Text = "Ты дружелюбный и полезный локальный ассистент. Отвечай кратко и по делу. Использу" +
+    "й Markdown для форматирования и оформляй код в блоки с тройными обратными апостр" +
+    "офами для общения в discord.";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 132);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(164, 13);
+            this.label4.TabIndex = 4;
+            this.label4.Text = "System Prompt (Only for Local AI)";
             // 
             // ModelNameTextBox
             // 
@@ -238,25 +256,37 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "Model name";
             // 
-            // SystemPromptTextbox
+            // IPAdressTextbox
             // 
-            this.SystemPromptTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.IPAdressTextbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.SystemPromptTextbox.Location = new System.Drawing.Point(15, 148);
-            this.SystemPromptTextbox.Multiline = true;
-            this.SystemPromptTextbox.Name = "SystemPromptTextbox";
-            this.SystemPromptTextbox.Size = new System.Drawing.Size(336, 199);
-            this.SystemPromptTextbox.TabIndex = 5;
-            this.SystemPromptTextbox.Text = "qwen3:8b";
+            this.IPAdressTextbox.Location = new System.Drawing.Point(15, 26);
+            this.IPAdressTextbox.Name = "IPAdressTextbox";
+            this.IPAdressTextbox.Size = new System.Drawing.Size(217, 20);
+            this.IPAdressTextbox.TabIndex = 1;
+            this.IPAdressTextbox.Text = "localhost:11434";
             // 
-            // label4
+            // label2
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 132);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(164, 13);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "System Prompt (Only for Local AI)";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 10);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(114, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "IP Adress for Local LM";
+            // 
+            // ProviderCombo
+            // 
+            this.ProviderCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProviderCombo.FormattingEnabled = true;
+            this.ProviderCombo.Items.AddRange(new object[] {
+            "ollama",
+            "lm studio"});
+            this.ProviderCombo.Location = new System.Drawing.Point(237, 25);
+            this.ProviderCombo.Name = "ProviderCombo";
+            this.ProviderCombo.Size = new System.Drawing.Size(114, 21);
+            this.ProviderCombo.TabIndex = 7;
+            this.ProviderCombo.Text = "ollama";
             // 
             // Form1
             // 
@@ -270,17 +300,17 @@
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(650, 500);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Sneikbot Console";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
@@ -308,5 +338,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox IPAdressTextbox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button ApplyNeuralButton;
+        private System.Windows.Forms.ComboBox ProviderCombo;
     }
 }
