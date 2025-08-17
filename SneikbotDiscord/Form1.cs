@@ -21,7 +21,7 @@ namespace SneikbotDiscord
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             //SneikBot.Stop();
-            Task.Run(SneikBot.Stop).GetAwaiter().GetResult();
+            //Task.Run(SneikBot.Stop).GetAwaiter().GetResult();
         }
 
         private void Form1_Shown(object sender, EventArgs e)
@@ -29,7 +29,7 @@ namespace SneikbotDiscord
             SneikBot.OnLog += delegate (string message) {
                 AddMessage(message);
             };
-            Task.Run(SneikBot.Start);
+            //Task.Run(SneikBot.Start);
         }
 
         List<string> messages = new List<string>();

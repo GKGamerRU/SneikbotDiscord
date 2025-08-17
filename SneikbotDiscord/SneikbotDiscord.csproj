@@ -233,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\AIProvider.dll" />
+    <None Include="Resources\SneikBot.png" />
     <None Include="Resources\Jacque.png" />
   </ItemGroup>
   <ItemGroup>
