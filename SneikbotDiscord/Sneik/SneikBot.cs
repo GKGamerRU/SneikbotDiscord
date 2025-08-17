@@ -30,6 +30,8 @@ namespace SneikbotDiscord.Sneik
 
         public static Dictionary<ulong, GuildData> Guilds = new Dictionary<ulong, GuildData>();
 
+        public static event Action<DiscordClient> OnServersListUpdate = delegate { };
+
         public static async Task Start()
         {
             var botConfig = BotConfiguration.LoadConfig();
@@ -48,6 +50,7 @@ namespace SneikbotDiscord.Sneik
                 if (Guilds.ContainsKey(e.Guild.Id) == false)
                 {
                     Guilds.Add(e.Guild.Id, new GuildData() { ID = e.Guild.Id });
+                    OnServersListUpdate(discord);
                     OnLog($"NEW Server Detected: {e.Guild.Name}");
                 }
                 if (markovChain.ContainsKey(e.Guild.Id) == false)
@@ -186,6 +189,7 @@ namespace SneikbotDiscord.Sneik
             }
             await Task.Run(() => MarkovImage.InitMemes());
 
+            OnServersListUpdate(discord);
             OnLog("Bot is connected and ready!");
             await CreatePaths();
 
