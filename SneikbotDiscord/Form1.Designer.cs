@@ -151,7 +151,7 @@
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(378, 461);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -183,9 +183,9 @@
             this.ServersLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ServersLabel.Location = new System.Drawing.Point(6, 3);
             this.ServersLabel.Name = "ServersLabel";
-            this.ServersLabel.Size = new System.Drawing.Size(70, 25);
+            this.ServersLabel.Size = new System.Drawing.Size(184, 25);
             this.ServersLabel.TabIndex = 0;
-            this.ServersLabel.Text = "label2";
+            this.ServersLabel.Text = "Loading servers...";
             // 
             // tabPage3
             // 
@@ -264,7 +264,7 @@
             this.IPAdressTextbox.Name = "IPAdressTextbox";
             this.IPAdressTextbox.Size = new System.Drawing.Size(217, 20);
             this.IPAdressTextbox.TabIndex = 1;
-            this.IPAdressTextbox.Text = "localhost:11434";
+            this.IPAdressTextbox.Text = "http://localhost:11434";
             // 
             // label2
             // 

@@ -1,6 +1,4 @@
-﻿using AIProvider;
-using AIProvider.Providers;
-using DSharpPlus.CommandsNext;
+﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using SneikbotDiscord.Sneik;
@@ -27,10 +25,12 @@ namespace SneikbotDiscord.Commands.Prefix
             if (SneikBot.botConfig.LocalNeuralProvider == "ollama")
             {
                 ollamaProvider.SetSystemPrompt(SneikBot.botConfig.SystemPrompt);
+                ollamaProvider._baseUrl = SneikBot.botConfig.NeuralAdresse;
             }
             else if (SneikBot.botConfig.LocalNeuralProvider == "lm studio")
             {
                 lmStudioProvider.SetSystemPrompt(SneikBot.botConfig.SystemPrompt);
+                lmStudioProvider._baseUrl = SneikBot.botConfig.NeuralAdresse;
             }
         }
         public static void ApplyAuto()
@@ -132,6 +132,7 @@ namespace SneikbotDiscord.Commands.Prefix
             dsMessage = await ctx.RespondAsync(":hourglass_flowing_sand:`подождите...`");
             Prompt prompt = new Prompt();
             prompt.Text = message;
+            prompt.ModelName = SneikBot.botConfig.ModelProvider;
 
             if (ctx.Message.Attachments != null && ctx.Message.Attachments.Count > 0)
             {

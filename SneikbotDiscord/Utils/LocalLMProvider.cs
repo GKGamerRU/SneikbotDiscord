@@ -85,7 +85,7 @@ public interface ILlmProvider
 
 public abstract class BaseProvider : ILlmProvider
 {
-    protected readonly string _baseUrl;
+    public string _baseUrl;
     protected string _systemPrompt;
     protected readonly List<JObject> _history = new List<JObject>(); // role/content(/images) сообщ.
 
