@@ -19,8 +19,6 @@ namespace SneikbotDiscord
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Fun.ApplyAuto();
-
             LogButton.Click += delegate { tabControl1.SelectTab(0); };
             ServersButton.Click += delegate { tabControl1.SelectTab(1); };
             NeuralButton.Click += delegate { tabControl1.SelectTab(2); };
