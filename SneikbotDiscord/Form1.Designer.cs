@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -40,6 +41,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.ServersLabel = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.ProviderCombo = new System.Windows.Forms.ComboBox();
             this.ApplyNeuralButton = new System.Windows.Forms.Button();
             this.SystemPromptTextbox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -47,13 +49,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.IPAdressTextbox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.ProviderCombo = new System.Windows.Forms.ComboBox();
+            this.AboutButton = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -86,6 +93,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.panel1.Controls.Add(this.AboutButton);
             this.panel1.Controls.Add(this.NeuralButton);
             this.panel1.Controls.Add(this.ServersButton);
             this.panel1.Controls.Add(this.LogButton);
@@ -144,6 +152,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.ItemSize = new System.Drawing.Size(0, 21);
             this.tabControl1.Location = new System.Drawing.Point(256, 0);
             this.tabControl1.Multiline = true;
@@ -151,7 +160,6 @@
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(378, 461);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -162,7 +170,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(370, 432);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Logs";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -174,7 +182,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(370, 432);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Servers List";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // ServersLabel
@@ -201,8 +209,21 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(370, 432);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "AI Config";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // ProviderCombo
+            // 
+            this.ProviderCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.ProviderCombo.FormattingEnabled = true;
+            this.ProviderCombo.Items.AddRange(new object[] {
+            "ollama",
+            "lm studio"});
+            this.ProviderCombo.Location = new System.Drawing.Point(237, 25);
+            this.ProviderCombo.Name = "ProviderCombo";
+            this.ProviderCombo.Size = new System.Drawing.Size(114, 21);
+            this.ProviderCombo.TabIndex = 7;
+            this.ProviderCombo.Text = "ollama";
             // 
             // ApplyNeuralButton
             // 
@@ -275,18 +296,65 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "IP Adress for Local LM";
             // 
-            // ProviderCombo
+            // AboutButton
             // 
-            this.ProviderCombo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.ProviderCombo.FormattingEnabled = true;
-            this.ProviderCombo.Items.AddRange(new object[] {
-            "ollama",
-            "lm studio"});
-            this.ProviderCombo.Location = new System.Drawing.Point(237, 25);
-            this.ProviderCombo.Name = "ProviderCombo";
-            this.ProviderCombo.Size = new System.Drawing.Size(114, 21);
-            this.ProviderCombo.TabIndex = 7;
-            this.ProviderCombo.Text = "ollama";
+            this.AboutButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.AboutButton.BackColor = System.Drawing.Color.White;
+            this.AboutButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AboutButton.Location = new System.Drawing.Point(3, 422);
+            this.AboutButton.Name = "AboutButton";
+            this.AboutButton.Size = new System.Drawing.Size(244, 36);
+            this.AboutButton.TabIndex = 4;
+            this.AboutButton.Text = "About";
+            this.AboutButton.UseVisualStyleBackColor = false;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.label7);
+            this.tabPage4.Controls.Add(this.label6);
+            this.tabPage4.Controls.Add(this.label5);
+            this.tabPage4.Location = new System.Drawing.Point(4, 25);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(370, 432);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "About";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label5.Location = new System.Drawing.Point(46, 25);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(293, 32);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Sneikbot (Discord Build)";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.ForeColor = System.Drawing.Color.Gray;
+            this.label6.Location = new System.Drawing.Point(16, 67);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(346, 248);
+            this.label6.TabIndex = 1;
+            this.label6.Text = resources.GetString("label6.Text");
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.label7.Location = new System.Drawing.Point(49, 397);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(276, 23);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "Powered by GKGamer | 2025";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Form1
             // 
@@ -313,6 +381,8 @@
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -340,5 +410,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ApplyNeuralButton;
         private System.Windows.Forms.ComboBox ProviderCombo;
+        private System.Windows.Forms.Button AboutButton;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label7;
     }
 }

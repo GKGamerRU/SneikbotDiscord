@@ -24,6 +24,7 @@ namespace SneikbotDiscord
             LogButton.Click += delegate { tabControl1.SelectTab(0); };
             ServersButton.Click += delegate { tabControl1.SelectTab(1); };
             NeuralButton.Click += delegate { tabControl1.SelectTab(2); };
+            AboutButton.Click += delegate { tabControl1.SelectTab(3); };
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
