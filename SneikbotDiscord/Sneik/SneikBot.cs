@@ -15,7 +15,6 @@ using Newtonsoft.Json;
 using SneikbotDiscord.Utils;
 using SneikbotDiscord.DataBase;
 using DSharpPlus.AsyncEvents;
-using SneikbotDiscord.Commands.Prefix;
 
 namespace SneikbotDiscord.Sneik
 {
