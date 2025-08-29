@@ -148,7 +148,7 @@ namespace SneikbotDiscord.Sneik
                 await jsonHandler.SaveGuildDataToJSON(guild.Value, guild.Key);
             }
 
-            await ModifyBotNickname($"Sneik (выключен {DateTime.Now.ToShortTimeString()} по МСК)",true);
+            //await ModifyBotNickname($"Sneik (выключен {DateTime.Now.ToShortTimeString()} по МСК)",true);
         }
 
         private static async Task OnReady(DiscordClient sender, ReadyEventArgs e)
@@ -193,7 +193,7 @@ namespace SneikbotDiscord.Sneik
             await CreatePaths();
 
             OnLog($"Сервера {discord.Guilds.Count}");
-            await ModifyBotNickname("Sneik");
+            //await ModifyBotNickname("Sneik");
         }
         static DiscordMessageBuilder CreatePong(string content)
         {
